@@ -9,3 +9,4 @@ class LogPageView(TemplateView):
 
 class SettingsPageView(TemplateView):
     template_name = "settingspage.html"
+

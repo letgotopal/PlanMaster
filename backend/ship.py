@@ -7,10 +7,26 @@ class Ship:
     @param bay: the 2D array representing the ship's bay. MUST BE SUPPLIED BY THE MANIFEST ORDER TO SUCCESSFULLY DISPLAY THE ORDER
     @return: a Ship object
     '''
-    def __init__(self, r=8, c=12, bay=None):
+    # def __init__(self, r=9, c=12, bay=None):
+    #     self.r = r
+    #     self.c = c
+    #     self.bay = [["Empty" for j in range(c)] for i in range(1)]
+
+    #     self.bay = bay or [["NAN" for j in range(c)] for i in range(1,r)]
+
+    def __init__(self, r=9, c=12, bay=None):
         self.r = r
         self.c = c
-        self.bay = bay or [["NAN" for j in range(c)] for i in range(r)]
+
+        # Initialize bay with "NAN" for all elements
+        self.bay = [[(0, "NAN") for _ in range(c)] for _ in range(r)]
+
+        # Set the first row to "Empty"
+        self.bay[0] = [(0, "Empty") for _ in range(c)]
+
+        # Override with the provided bay if available
+        if bay:
+            self.bay = bay
 
     '''
     @function: prints the ship's bay
@@ -26,9 +42,9 @@ class Ship:
     '''
     @function: sets the value of a cell in the ship's bay
     @param self: the Ship object
-    @param i: the row of the cell
-    @param j: the column of the cell
-    @param value: the value to set the cell to
+    @param int(i): the row of the cell
+    @param int(j): the column of the cell
+    @param tuple(value): the value to set the cell of type (int(weight), str(message))
     @return: None
     '''
     def set_value(self, i, j, value):
@@ -37,8 +53,8 @@ class Ship:
     '''
     @function: gets the value of a cell in the ship's bay
     @param self: the Ship object
-    @param i: the row of the cell
-    @param j: the column of the cell
+    @param int(i): the row of the cell
+    @param int(j): the column of the cell
     @return: the value of the cell
     '''
     def get_value(self, i, j):

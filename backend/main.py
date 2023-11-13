@@ -1,13 +1,16 @@
-# Mainly used for testing, could be changed later
-from ship import Ship
+# Mainly used for testing, will be changed later based on the database's API
+import manifest
 
 def main():
-    testShip = Ship()
-    testShip.print_bay()
+    test_filename = "Voyager_Capt_King.txt"
 
-    testShip.set_value(0, 0, "Walmart - Adult bicycles (Call Sue from office)")
+    testManifest = manifest.Manifest()
+    new_ship = testManifest.read_manifest(test_filename)
+    new_ship.print_bay()
 
-    testShip.print_bay()
+    new_ship.set_value(5, 4, (100, "Test"))
+    
+    testManifest.write_manifest(new_ship, test_filename)
 
 if __name__ == "__main__":
     main()

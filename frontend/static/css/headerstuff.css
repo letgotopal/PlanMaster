@@ -1,0 +1,51 @@
+  .Title {
+    display:inline-block
+  }
+
+  .navbar {
+
+    background-color: #87878a;
+    
+    position: relative;
+    
+    z-index: 999;
+    
+  }
+
+  .navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar li {
+    display: inline-block;
+  }
+
+  .navbar li a {
+    background-color: #87878a;
+    color: black;
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+  }
+
+  .navbar ul ul {
+    position: absolute;
+    top: 100%;
+    display: none;
+  }
+
+  .navbar ul ul li {
+    display: block;
+  }
+    
+    .navbar li:hover ul {
+    display: block;
+  }
+
+  .navbar ul ul li a:hover {
+    background-color: #555;
+  }
+
+  

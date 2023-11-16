@@ -10,3 +10,6 @@ class LogPageView(TemplateView):
 class SettingsPageView(TemplateView):
     template_name = "settingspage.html"
 
+class TutorialPageView(TemplateView):
+    template_name = "tutorialpage.html"
+

@@ -21,8 +21,8 @@ class Ship:
         # Initialize bay with "NAN" for all elements
         self.bay = [[(0, "NAN") for _ in range(c)] for _ in range(r)]
 
-        # Set the first row to "Empty"
-        self.bay[0] = [(0, "Empty") for _ in range(c)]
+        # Set the first row to "UNUSED"
+        self.bay[0] = [(0, "UNUSED") for _ in range(c)]
 
         # Override with the provided bay if available
         if bay:

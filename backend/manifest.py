@@ -75,7 +75,7 @@ class Manifest:
                 for j in range(ship.c):
                     value = ship.get_value(i,j)
 
-                    f.write("[" + "{:02d}".format(i) + ", " + "{:02d}".format(j) + "], "
+                    f.write("[" + "{:02d}".format(i) + "," + "{:02d}".format(j) + "], "
                             + "{" + "{:05d}".format(value[0]) + "}, " + value[1] + "\n")
 
                 

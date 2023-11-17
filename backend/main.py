@@ -1,5 +1,6 @@
 # Mainly used for testing, will be changed later based on the database's API
 import manifest
+import lualgorithm
 
 def main():
     test_filename = "Voyager_Capt_King.txt"
@@ -11,6 +12,13 @@ def main():
     new_ship.set_value(5, 4, (100, "Test"))
     
     testManifest.write_manifest(new_ship, test_filename)
+
+    neighbors = lualgorithm.neighbors((1,2), new_ship)
+    
+    print()
+    print()
+    
+    print("Neighbors:", neighbors)
 
 if __name__ == "__main__":
     main()

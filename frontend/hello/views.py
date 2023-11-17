@@ -27,8 +27,8 @@ class HomePageView(View):
 class LogPageView(TemplateView):
     template_name = "logdownloadpage.html"
 
-class SettingsPageView(TemplateView):
-    template_name = "settingspage.html"
+class ManagePageView(TemplateView):
+    template_name = "managepage.html"
 
 class TutorialPageView(TemplateView):
     template_name = "tutorialpage.html"

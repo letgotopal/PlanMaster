@@ -58,6 +58,8 @@ class Manifest:
                 # Assigning manifest values to the ship's bay
                 ship.set_value(row, column-1, value=value)
 
+        # Set all the column heights of the newly created ship
+        ship.calculateColHeight()
         
         # Returning the newly assigned Ship object
         return ship

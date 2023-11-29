@@ -1,3 +1,4 @@
+import copy
 # returns the minimum cost in a vector( if
 # there are multiple goal states)
 # Goal: empty list
@@ -26,14 +27,17 @@ def balanceScore(ship):
 
     # If the ship is empty
     if leftSum == 0 and rightSum == 0:
+        print("Went here")
         return 1
 
     # If one side is empty
     if leftSum == 0 or rightSum == 0:
+        print("Went there")
         return 0
 
     result = min(leftSum, rightSum)/max(leftSum, rightSum)
 
+    print("Just returned: ", result)
     return result
 
 '''
@@ -59,24 +63,37 @@ def operations(ship):
             value = ship.get_value(top, column)
             r, c = top, column
         else:
+            print("Going to continue")
             continue
         
         for col in range(ship.c):
             # Check if the cell is not empty
-            
+            if col == column:
+                continue
+
             top, bottom = ship.colHeight[col]
             if bottom != ship.r:
                 if top != ship.r:
-                    ship.set_value(top+1, col, value)
-                    score = balanceScore(ship)
-                    result.append((score, ship))
-                    ship.set_value(top+1, col, (0, "UNUSED"))
-    
+                    
+                    new_ship = copy.deepcopy(ship)
+                    # new_ship.colHeight[column] = (top-1, bottom)
+                    # new_ship.colHeight[col] = (top+1, bottom)
+                    new_ship.set_value(top+1, col, value)
+                    new_ship.set_value(r, c, (0, "UNUSED"))
+                    new_ship.calculateColHeight()
+                    print("New ship: ")
+                    new_ship.print_bay()
+                    print()
+                    print()
+                    score = balanceScore(new_ship)
+                    result.append((score, new_ship))
+
     return result
 
 
 # Tests whether the ship is balanced
 def goalTest(score):
+    print("Did you go in???")
     if score > 0.9:
         return True
     return False
@@ -86,17 +103,47 @@ def goalTest(score):
 
  
 def ucs(ship):
-    
-    queue = set(operations(ship))
+
+    # Creating a frontier array to store the nodes
+    queue = []
+    visited = []
+    # Initialize the frontier with the initial state's operations
+    queue = operations(ship)    
+    # queue = set(operations(ship))
+    # visited = set()
+    print("Our queue's outisde len", len(queue), '\n')
+
 
     while(len(queue) != 0):
-        node = queue.pop()
+        node = queue.pop(0)
         
-        if goalTest(node[0]):
+        print("Our node: ", node)
+        goalRes = goalTest(node[0])
+        print(goalRes)
+        if goalRes is True:
+            print("PLESE GO IN HERE!!!!!!!!!!!!!!!")
             return node[1]
+        print("Our queue's cur len", len(queue), '\n')
 
-        newOperations = operations(node[1])
-        queue.update(newOperations)
+        flag = False
+        for vals in visited:
+            if vals == hash(node[1]):
+                flag = True
+        
+        if not flag:
+            newOperations = operations(node[1])
+            visited.append(hash(node[1]))
+            for op in newOperations:
+                inFlag = False
+                
+                for vals in visited:
+                    if vals == hash(op[1]):
+                        inFlag = True
+                
+                if not inFlag:
+                    visited.append(hash(op[1]))
+                    queue.append(op)
+            # queue.extend(newOperations)
     
     # Supposed to call SIFT
     return "TESTING: Can't be balanced" 

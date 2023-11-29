@@ -56,7 +56,8 @@ class Manifest:
                     print("No match found in the line.")
 
                 # Assigning manifest values to the ship's bay
-                ship.set_value(row, column-1, value=value)
+                # Rows and columns are offset to have the first row and column be 0
+                ship.set_value(row-1, column-1, value=value)
 
         # Set all the column heights of the newly created ship
         ship.calculateColHeight()
@@ -73,11 +74,14 @@ class Manifest:
         filename = filename + "_OUTBOUND.txt"
 
         with open(filename, 'w') as f:
-            for i in range(ship.r):
+            
+            # The extra row is eliminated since it is not part of the ship's bay
+            for i in range(ship.r - 1):
                 for j in range(ship.c):
                     value = ship.get_value(i,j)
 
-                    f.write("[" + "{:02d}".format(i) + "," + "{:02d}".format(j) + "], "
+                    # Rows and columns must be changed back to their original offset
+                    f.write("[" + "{:02d}".format(i+1) + "," + "{:02d}".format(j+1) + "], "
                             + "{" + "{:05d}".format(value[0]) + "}, " + value[1] + "\n")
 
                 

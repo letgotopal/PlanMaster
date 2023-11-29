@@ -1,3 +1,5 @@
+from copy import copy
+
 class Ship:
     '''
     @function: constructor for the Ship class
@@ -11,11 +13,8 @@ class Ship:
         self.r = r
         self.c = c
 
-        # Initialize bay with "NAN" for all elements
-        self.bay = [[(0, "NAN") for _ in range(c)] for _ in range(r)]
-
-        # Set the first row to "UNUSED"
-        self.bay[0] = [(0, "UNUSED") for _ in range(c)]
+        # Initialize bay with "UNUSED" for all elements
+        self.bay = [[(0, "UNUSED") for _ in range(c)] for _ in range(r)]
 
         # Stores a tuple of the form (top, bottom) for each column
         # The top is the first instance of a container in the column
@@ -66,13 +65,13 @@ class Ship:
     '''
     def calculateColHeight(self):
         for col in range(self.c):
-            top = 0
-            bottom = 0
+            top = -1
+            bottom = -1
             for row in range(self.r):
                 if self.bay[row][col][1] != "UNUSED" and self.bay[row][col][1] != "NAN":
-                    if top < row:
-                        top = row
+                    top += 1
                 elif self.bay[row][col][1] == "NAN":
                     bottom += 1
+                    top += 1
 
             self.colHeight[col] = (top, bottom)

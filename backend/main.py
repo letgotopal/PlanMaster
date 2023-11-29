@@ -6,6 +6,8 @@ import balancingAlg
 
 def main():
     test_filename = "ShipCase1.txt"
+    # test_filename = "Voyager_Capt_King.txt"
+
 
     testManifest = manifest.Manifest()
     new_ship = testManifest.read_manifest(test_filename)
@@ -20,14 +22,13 @@ def main():
     print()
     print()
     
+    print(new_ship.colHeight)
+    
     # print("Neighbors:", neighbors)
 
     res = balancingAlg.ucs(new_ship)
 
-    if type(res) is Ship():
-        res.print_bay()
-    else:
-        print("Result:", res)
+    res.print_bay()
 
 if __name__ == "__main__":
     main()

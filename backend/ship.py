@@ -75,3 +75,18 @@ class Ship:
                     top += 1
 
             self.colHeight[col] = (top, bottom)
+
+    '''
+    @function: Re-defining the equality operator for the Ship class
+    @param self: the Ship object
+    @param other: the other Ship object to compare to
+    @return: True if the two ships are equal, False otherwise
+    '''
+    def __eq__(self, other):
+        if self.r != other.r or self.c != other.c:
+            return False
+
+        if self.bay != other.bay:
+            return False
+
+        return True

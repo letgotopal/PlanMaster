@@ -27,17 +27,14 @@ def balanceScore(ship):
 
     # If the ship is empty
     if leftSum == 0 and rightSum == 0:
-        print("Went here")
         return 1
 
     # If one side is empty
     if leftSum == 0 or rightSum == 0:
-        print("Went there")
         return 0
 
     result = min(leftSum, rightSum)/max(leftSum, rightSum)
 
-    print("Just returned: ", result)
     return result
 
 '''
@@ -63,7 +60,6 @@ def operations(ship):
             value = ship.get_value(top, column)
             r, c = top, column
         else:
-            print("Going to continue")
             continue
         
         for col in range(ship.c):
@@ -81,10 +77,6 @@ def operations(ship):
                     new_ship.set_value(top+1, col, value)
                     new_ship.set_value(r, c, (0, "UNUSED"))
                     new_ship.calculateColHeight()
-                    print("New ship: ")
-                    new_ship.print_bay()
-                    print()
-                    print()
                     score = balanceScore(new_ship)
                     result.append((score, new_ship))
 
@@ -93,7 +85,6 @@ def operations(ship):
 
 # Tests whether the ship is balanced
 def goalTest(score):
-    print("Did you go in???")
     if score > 0.9:
         return True
     return False
@@ -102,49 +93,91 @@ def goalTest(score):
 '''
 
  
+# def ucs(ship):
+
+#     # Creating a frontier array to store the nodes
+#     queue = []
+#     visited = []
+#     # Initialize the frontier with the initial state's operations
+#     queue = operations(ship)    
+#     # queue = set(operations(ship))
+#     # visited = set()
+#     print("Our queue's outisde len", len(queue), '\n')
+
+
+#     while(len(queue) != 0):
+#         node = queue.pop(0)
+        
+#         print("Our node: ", node)
+#         goalRes = goalTest(node[0])
+#         print(goalRes)
+#         if goalRes is True:
+#             print("PLESE GO IN HERE!!!!!!!!!!!!!!!")
+#             return node[1]
+#         print("Our queue's cur len", len(queue), '\n')
+
+#         flag = False
+#         for vals in visited:
+#             if vals == hash(node[1]):
+#                 flag = True
+        
+#         if not flag:
+#             newOperations = operations(node[1])
+#             visited.append(hash(node[1]))
+#             for op in newOperations:
+#                 inFlag = False
+                
+#                 for vals in visited:
+#                     if vals == hash(op[1]):
+#                         inFlag = True
+                
+#                 if not inFlag:
+#                     visited.append(hash(op[1]))
+#                     queue.append(op)
+#             # queue.extend(newOperations)
+    
+#     # Supposed to call SIFT
+#     return "TESTING: Can't be balanced" 
+
 def ucs(ship):
 
     # Creating a frontier array to store the nodes
     queue = []
     visited = []
+
     # Initialize the frontier with the initial state's operations
     queue = operations(ship)    
-    # queue = set(operations(ship))
-    # visited = set()
-    print("Our queue's outisde len", len(queue), '\n')
 
-
+    queue = sorted(queue, key=lambda x: x[0], reverse=True)
+    
     while(len(queue) != 0):
         node = queue.pop(0)
-        
-        print("Our node: ", node)
-        goalRes = goalTest(node[0])
-        print(goalRes)
-        if goalRes is True:
-            print("PLESE GO IN HERE!!!!!!!!!!!!!!!")
-            return node[1]
-        print("Our queue's cur len", len(queue), '\n')
 
-        flag = False
-        for vals in visited:
-            if vals == hash(node[1]):
-                flag = True
-        
-        if not flag:
-            newOperations = operations(node[1])
-            visited.append(hash(node[1]))
-            for op in newOperations:
-                inFlag = False
-                
-                for vals in visited:
-                    if vals == hash(op[1]):
-                        inFlag = True
-                
-                if not inFlag:
-                    visited.append(hash(op[1]))
-                    queue.append(op)
-            # queue.extend(newOperations)
+        print("Len of queue: ", len(queue), '\n')
+
+        print("The current bay with score: ", node[0])
+        node[1].print_bay()
+        print('\n')
+
+        goalRes = goalTest(node[0])
     
+        if goalRes is True:
+            return node[1]
+
+        newOperations = operations(node[1])
+        visited.append(node)
+        appendFlag = False  
+        for newOp in newOperations:
+            if newOp not in visited:
+                inQueue = any(newOp[1] == ships for vals, ships in queue)
+                if inQueue:
+                    continue
+                queue.append(newOp)
+                appendFlag = True
+                
+        if appendFlag:
+            queue = sorted(queue, key=lambda x: x[0], reverse=True)
+
     # Supposed to call SIFT
     return "TESTING: Can't be balanced" 
         

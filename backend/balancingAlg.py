@@ -72,10 +72,9 @@ def operations(ship):
                 if top != ship.r:
                     
                     new_ship = copy.deepcopy(ship)
-                    # new_ship.colHeight[column] = (top-1, bottom)
-                    # new_ship.colHeight[col] = (top+1, bottom)
                     new_ship.set_value(top+1, col, value)
                     new_ship.set_value(r, c, (0, "UNUSED"))
+                    new_ship.gn = ship.gn + ship.timeFunction(column, col)
                     new_ship.calculateColHeight()
                     score = balanceScore(new_ship)
                     result.append((score, new_ship))
@@ -88,9 +87,6 @@ def goalTest(score):
     if score > 0.9:
         return True
     return False
-'''
-@function
-'''
 
  
 # def ucs(ship):
@@ -148,14 +144,14 @@ def ucs(ship):
     # Initialize the frontier with the initial state's operations
     queue = operations(ship)    
 
-    queue = sorted(queue, key=lambda x: x[0], reverse=True)
+    queue = sorted(queue, key=lambda x: x[1].gn)
     
     while(len(queue) != 0):
         node = queue.pop(0)
 
         print("Len of queue: ", len(queue), '\n')
 
-        print("The current bay with score: ", node[0])
+        print("The current bay with score: ", node[1].gn)
         node[1].print_bay()
         print('\n')
 
@@ -176,7 +172,7 @@ def ucs(ship):
                 appendFlag = True
                 
         if appendFlag:
-            queue = sorted(queue, key=lambda x: x[0], reverse=True)
+            queue = sorted(queue, key=lambda x: x[1].gn)
 
     # Supposed to call SIFT
     return "TESTING: Can't be balanced" 

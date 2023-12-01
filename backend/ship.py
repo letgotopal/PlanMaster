@@ -6,10 +6,11 @@ class Ship:
     @param self: the Ship object
     @param r: the number of rows on the ship
     @param c: the number of columns on the ship
+    @ param gn: the time taken to move the container from start to end
     @param bay: the 2D array representing the ship's bay. MUST BE SUPPLIED BY THE MANIFEST ORDER TO SUCCESSFULLY DISPLAY THE ORDER
     @return: a Ship object
     '''
-    def __init__(self, r=9, c=12, bay=None):
+    def __init__(self, r=9, c=12, bay=None, gn=0):
         self.r = r
         self.c = c
 
@@ -20,6 +21,8 @@ class Ship:
         # The top is the first instance of a container in the column
         # The bottom is the last instance of a container in the column
         self.colHeight = [(0,0)]*c
+
+        self.gn = gn
 
         # Override with the provided bay if available
         if bay:
@@ -90,3 +93,40 @@ class Ship:
             return False
 
         return True
+    
+    '''
+    @function: Calculating the G(n) i.e. time taken to move container from one position to another
+    @param self: The ship with the initial position of the container
+    @param initCol: The initial position of the container
+    @param finalCol: The final position of the container
+    @return: The time taken to move the container from start to end
+    '''
+    def timeFunction(self, initCol, finalCol):
+
+        # colHeights[0] is the heights of all the columns in the ship
+        colHeights = self.colHeight
+        
+        # Initializing the base val of maxHeight
+        maxHeight = colHeights[initCol][0]
+        
+        # The top of the initial container
+        initialHeight = maxHeight
+        
+        # For the heights between the initial and final container columns
+        if initCol < finalCol:
+            for col in range(initCol+1, finalCol+1):
+                if maxHeight <= colHeights[col][0]:
+                    maxHeight = colHeights[col][0] + 1
+        else:
+            for col in range(finalCol, initCol):
+                if maxHeight <= colHeights[col][0]:
+                    maxHeight = colHeights[col][0] + 1
+        
+        # The final height of the container
+        finalHeight = colHeights[finalCol][0] + 1
+
+        # The time taken to move the container from start to end
+        result = (maxHeight - initialHeight) + abs(finalCol - initCol) + (maxHeight - finalHeight)
+        
+        return result
+

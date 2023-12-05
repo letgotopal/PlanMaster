@@ -37,14 +37,10 @@ def balanceScore(ship):
 
     return result
 
-'''
-@function: constructor for the Ship class
-@param self: the Ship object
-@param r: the number of rows on the ship
-@param c: the number of columns on the ship
-@param bay: the 2D array representing the ship's bay. MUST BE SUPPLIED BY THE MANIFEST ORDER TO SUCCESSFULLY DISPLAY THE ORDER
-@return: a Ship object
-The value of the ship is stored as: value = (int(weight), message)
+''''
+@function:Unload operations functions for our ucs algorithm
+@param ship: the Ship object
+@return: a list of tuples of the form (score, ship)
 '''
 def operations(ship):
     
@@ -71,12 +67,28 @@ def operations(ship):
             if bottom != ship.r:
                 if top != ship.r:
                     
+                    # Make a copy of the ship
                     new_ship = copy.deepcopy(ship)
+
+                    # set the final location of the container with it's weight and value
                     new_ship.set_value(top+1, col, value)
+
+                    # Reset the original location to UNUSED
                     new_ship.set_value(r, c, (0, "UNUSED"))
-                    new_ship.gn = ship.gn + ship.timeFunction(column, col)
+
+                    # Update the gn score of the ship with move's score
+                    new_ship.gn = ship.gn + ship.balanceTimeFunction(column, col)
+
+                    # Recalculate the colHeights of the ship
                     new_ship.calculateColHeight()
+
+                    # Re-setting the crane's intital location to the new container's location
+                    new_ship.craneLocation = (top+2,col)
+
+                    # Setting the balance score of the ship
                     score = balanceScore(new_ship)
+
+                    # Appending the balance score and the new ship to the result list
                     result.append((score, new_ship))
 
     return result
@@ -88,52 +100,6 @@ def goalTest(score):
         return True
     return False
 
- 
-# def ucs(ship):
-
-#     # Creating a frontier array to store the nodes
-#     queue = []
-#     visited = []
-#     # Initialize the frontier with the initial state's operations
-#     queue = operations(ship)    
-#     # queue = set(operations(ship))
-#     # visited = set()
-#     print("Our queue's outisde len", len(queue), '\n')
-
-
-#     while(len(queue) != 0):
-#         node = queue.pop(0)
-        
-#         print("Our node: ", node)
-#         goalRes = goalTest(node[0])
-#         print(goalRes)
-#         if goalRes is True:
-#             print("PLESE GO IN HERE!!!!!!!!!!!!!!!")
-#             return node[1]
-#         print("Our queue's cur len", len(queue), '\n')
-
-#         flag = False
-#         for vals in visited:
-#             if vals == hash(node[1]):
-#                 flag = True
-        
-#         if not flag:
-#             newOperations = operations(node[1])
-#             visited.append(hash(node[1]))
-#             for op in newOperations:
-#                 inFlag = False
-                
-#                 for vals in visited:
-#                     if vals == hash(op[1]):
-#                         inFlag = True
-                
-#                 if not inFlag:
-#                     visited.append(hash(op[1]))
-#                     queue.append(op)
-#             # queue.extend(newOperations)
-    
-#     # Supposed to call SIFT
-#     return "TESTING: Can't be balanced" 
 
 def ucs(ship):
 

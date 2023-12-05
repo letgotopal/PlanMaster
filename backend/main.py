@@ -5,7 +5,7 @@ import lualgorithm
 import balancingAlg
 
 def main():
-    test_filename = "ShipCase4.txt"
+    test_filename = "ShipCase1.txt"
     # test_filename = "Voyager_Capt_King.txt"
 
 

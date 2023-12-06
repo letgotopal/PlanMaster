@@ -29,7 +29,7 @@ class Ship:
             self.bay = bay
 
         # Adding a crane location (row, column) to the ship
-        self.craneLocation = (9,0)
+        self.craneLocation = (8,0)
 
     '''
     @function: prints the ship's bay
@@ -116,13 +116,14 @@ class Ship:
         initialHeight = maxHeight
         
         # For the heights between the initial and final container columns
+        # Makes sure to go a level above the max height container unless it's already at 8 (0-indexed)
         if initCol < finalCol:
             for col in range(initCol+1, finalCol+1):
-                if maxHeight <= colHeights[col][0]:
+                if maxHeight <= colHeights[col][0] and maxHeight < 8:
                     maxHeight = colHeights[col][0] + 1
         else:
             for col in range(finalCol, initCol):
-                if maxHeight <= colHeights[col][0]:
+                if maxHeight <= colHeights[col][0] and maxHeight < 8:
                     maxHeight = colHeights[col][0] + 1
         
         # The final height of the container
@@ -131,8 +132,13 @@ class Ship:
         # The time taken to move the container from start to end
         result = (maxHeight - initialHeight) + abs(finalCol - initCol) + (maxHeight - finalHeight)
 
+        
+
         # Updating the result to include the crane's time taken to move to the container
         result += self.craneTimeFunction(initCol)
+
+        # Printing the entire g(n) score breakdown
+        # print('(', maxHeight, '-', initialHeight, ') + ', 'abs (', finalCol, ' - ', initCol, ')', ' + (', maxHeight, '-', finalHeight, ') + ', self.craneTimeFunction(initCol), ' = ', result, sep='')
         
         return result
     
@@ -143,37 +149,30 @@ class Ship:
     @param finalCol: Col of the goal container
     @return: Same as description of the function
     '''
-    def craneTimeFunction(self, finalCol):
-
-        # colHeights[0] is the heights of all the columns in the ship
+    def craneTimeFunction(self, finalColumn):
         colHeights = self.colHeight
-        
-        # Initializing the base val of maxHeight
-        maxHeight = self.craneLocation[0]
-        
-        # The top of the initial container
-        initialHeight = maxHeight
-        
-        # Setting the initCol to the crane's current column
-        initCol = self.craneLocation[1]
+        finalRow = colHeights[finalColumn][0]
+        initCraneRow = self.craneLocation[0]
+        initCraneCol = self.craneLocation[1]
 
-        # For the heights between the initial and final container columns
-        if initCol < finalCol:
-            for col in range(initCol+1, finalCol+1):
-                if maxHeight <= colHeights[col][0]:
-                    maxHeight = colHeights[col][0] + 1
-        else:
-            for col in range(finalCol, initCol):
-                if maxHeight <= colHeights[col][0]:
-                    maxHeight = colHeights[col][0] + 1
-        
-        # The final height of the container
-        finalHeight = colHeights[finalCol][0] + 1
+        #note: test crane is at (4,3), we want it to get to (1,2), which should be 4 moves
+        #4-1=3 + 3-2
 
-        # The time taken to move the container from start to end
-        result = (maxHeight - initialHeight) + abs(finalCol - initCol) + (maxHeight - finalHeight)
+        maxHeight = initCraneRow
+
+        for col in range(min(initCraneCol, finalColumn), max(initCraneCol, finalColumn)):
+             if maxHeight <= colHeights[col][0] and maxHeight < 8:
+                 maxHeight = colHeights[col][0] + 1
+
+
+        result = abs(maxHeight-finalRow) + abs(initCraneCol-finalColumn)
+
+        # Printing the entire g(n) score breakdown
+        print('abs (', maxHeight, '-', finalRow, ') + ', 'abs (', initCraneCol, ' - ', finalColumn, ')', ' = ', result, sep='')
+
         
         return result
+
 
     '''
     @function: Calculating the G(n) i.e. total time taken to unload a container off the ship
@@ -183,8 +182,15 @@ class Ship:
     @return: An int value of the G(n) score
     '''
     def unloadTimeFunction(self, row, column):
+        
+        # The result to be returned
+        res = 0
+        
+        # Initializing the Crane time variable
+        craneTime = 0
+        
         # Check the crane's prev location
-        if self.craneLocation != (0,0):
+        if self.craneLocation != (8,0):
             # If the crane's prev location is (0,0), then the crane is at the ship's location
             craneTime = self.craneTimeFunction(column)
 
@@ -200,14 +206,20 @@ class Ship:
         # The time taken to got from the ship to the truck is 2 units/minutes
         shipToTruck = 2
 
-
         # Final result
-        res = rowTot + colTot + shipToTruck
+        #rowTot + colTot is the time to get to the corner of the ship (with the portal to the truck), then needs to get to truck
+        res = rowTot + colTot + shipToTruck 
 
-        if self.craneLocation == (0,0):
+        if self.craneLocation == (8,0):
             # Double the result to add the time taken by the crane
             res *= 2
         
+            # Printing the entire g(n) score breakdown
+            print('(', rowTot, '+', colTot, '+', shipToTruck, ') * 2 = ', res, sep='')
+        
+        # Printing the entire g(n) score breakdown outside the if statement
+        print('(', rowTot, '+', colTot, '+', shipToTruck, ') + (', craneTime,') = ', res, sep='')
+
         return res
 
 

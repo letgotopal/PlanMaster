@@ -1,7 +1,7 @@
 # Mainly used for testing, will be changed later based on the database's API
 from ship import Ship
 import manifest
-import lualgorithm
+import luAlg
 import balancingAlg
 
 def main():
@@ -21,13 +21,15 @@ def main():
     
     print()
     print()
-    
-    print(new_ship.colHeight)
-    
+        
     # print("Neighbors:", neighbors)
 
-    res = balancingAlg.ucs(new_ship)
+    # res = balancingAlg.ucs(new_ship)
 
+    res = luAlg.ucs(new_ship, [(0,2)])
+
+    print(res)
+    print("The final ship's G(n) is: ", res.gn)
     res.print_bay()
 
 if __name__ == "__main__":

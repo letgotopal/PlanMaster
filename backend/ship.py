@@ -10,7 +10,7 @@ class Ship:
     @param bay: the 2D array representing the ship's bay. MUST BE SUPPLIED BY THE MANIFEST ORDER TO SUCCESSFULLY DISPLAY THE ORDER
     @return: a Ship object
     '''
-    def __init__(self, r=9, c=12, bay=None, gn=0):
+    def __init__(self, r=9, c=12, bay=None, gn=0, parent=None):
         self.r = r
         self.c = c
 
@@ -30,6 +30,9 @@ class Ship:
 
         # Adding a crane location (row, column) to the ship
         self.craneLocation = (8,0)
+
+        # Adding a parent variable to each ship
+        self.parent = parent
 
     '''
     @function: prints the ship's bay
@@ -130,9 +133,7 @@ class Ship:
         finalHeight = colHeights[finalCol][0] + 1
 
         # The time taken to move the container from start to end
-        result = (maxHeight - initialHeight) + abs(finalCol - initCol) + (maxHeight - finalHeight)
-
-        
+        result = abs(maxHeight - initialHeight) + abs(finalCol - initCol) + abs(maxHeight - finalHeight)
 
         # Updating the result to include the crane's time taken to move to the container
         result += self.craneTimeFunction(initCol)
@@ -160,15 +161,22 @@ class Ship:
 
         maxHeight = initCraneRow
 
-        for col in range(min(initCraneCol, finalColumn), max(initCraneCol, finalColumn)):
-             if maxHeight <= colHeights[col][0] and maxHeight < 8:
-                 maxHeight = colHeights[col][0] + 1
+        if initCraneCol < finalColumn:
+            for col in range(initCraneCol+1, finalColumn):
+                if maxHeight <= colHeights[col][0] and maxHeight < 8:
+                    maxHeight = colHeights[col][0] + 1
+        else:
+            for col in range(finalColumn+1, initCraneCol):
+                if maxHeight <= colHeights[col][0] and maxHeight < 8:
+                    maxHeight = colHeights[col][0] + 1
 
+        if maxHeight <= colHeights[finalColumn][0] and maxHeight < 8:
+            maxHeight = colHeights[finalColumn][0]
 
-        result = abs(maxHeight-finalRow) + abs(initCraneCol-finalColumn)
+        result = abs(maxHeight- min(initCraneRow, finalRow)) + abs(initCraneCol-finalColumn)
 
         # Printing the entire g(n) score breakdown
-        print('abs (', maxHeight, '-', finalRow, ') + ', 'abs (', initCraneCol, ' - ', finalColumn, ')', ' = ', result, sep='')
+        # print('abs (', maxHeight, '-', finalRow, ') + ', 'abs (', initCraneCol, ' - ', finalColumn, ')', ' = ', result, sep='')
 
         
         return result
@@ -189,12 +197,18 @@ class Ship:
         # Initializing the Crane time variable
         craneTime = 0
         
-        # Check the crane's prev location
-        if self.craneLocation != (8,0):
-            # If the crane's prev location is (0,0), then the crane is at the ship's location
-            craneTime = self.craneTimeFunction(column)
+        # The time taken to got from the ship to the truck is 2 units/minutes
+        shipToTruck = 2
 
-            res += craneTime
+        # Check the crane's prev location
+        if self.craneLocation[0] != 8 or self.craneLocation[1] != 0:
+            # If the crane's prev location is (0,0), then the crane is at the ship's location
+            print("In here")
+            craneTime = self.craneTimeFunction(column)
+            print("Crane time is: ", craneTime)
+            
+            # Updating the result to include the crane's time taken to move to the container
+            res += craneTime + shipToTruck
 
         # Calculaing the time take to move from the initial position onto the truck
         # Calculating the time to get to 9 high
@@ -203,22 +217,20 @@ class Ship:
         # Calculatin ghte time to get to the 0th col
         colTot = column
 
-        # The time taken to got from the ship to the truck is 2 units/minutes
-        shipToTruck = 2
 
         # Final result
-        #rowTot + colTot is the time to get to the corner of the ship (with the portal to the truck), then needs to get to truck
-        res = rowTot + colTot + shipToTruck 
+        # rowTot + colTot is the time to get to the top left of the ship (also accounting for the additional ship to truck time here)
+        res = res + rowTot + colTot + shipToTruck
 
         if self.craneLocation == (8,0):
             # Double the result to add the time taken by the crane
             res *= 2
         
             # Printing the entire g(n) score breakdown
-            print('(', rowTot, '+', colTot, '+', shipToTruck, ') * 2 = ', res, sep='')
+            # print('(', rowTot, '+', colTot, '+', shipToTruck, ') * 2 = ', res, sep='')
         
         # Printing the entire g(n) score breakdown outside the if statement
-        print('(', rowTot, '+', colTot, '+', shipToTruck, ') + (', craneTime,') = ', res, sep='')
+        # print('(', rowTot, '+', colTot, '+', shipToTruck, ') + (', craneTime,') = ', res, sep='')
 
         return res
 

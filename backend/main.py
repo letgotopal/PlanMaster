@@ -5,7 +5,7 @@ import luAlg
 import balancingAlg
 
 def main():
-    test_filename = "ShipCase1.txt"
+    test_filename = "ShipCase4.txt"
     # test_filename = "Voyager_Capt_King.txt"
 
 
@@ -26,11 +26,18 @@ def main():
 
     # res = balancingAlg.ucs(new_ship)
 
-    res = luAlg.ucs(new_ship, [(0,2)])
+    res = luAlg.ucs(new_ship, [(7,4), (6,4)])
 
     print(res)
-    print("The final ship's G(n) is: ", res.gn)
+    print("The final ship's G(n) is: ", res.gn, "and it's crane values are: ", res.craneLocation)
+    print("The ship's col heights are: ", res.colHeight)
     res.print_bay()
-
+    
+    while(type(res.parent) != type(None)):
+        res = res.parent
+        print("The parent's G(n) is: ", res.gn, "and it's crane values are: ", res.craneLocation)
+        print("The parent's col heights are: ", res.colHeight)
+        res.print_bay()
+    
 if __name__ == "__main__":
     main()

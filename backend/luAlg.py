@@ -28,9 +28,10 @@ def ucs(ship, uList):
     while(len(queue) != 0):
         node = queue.pop(0)
 
-        print("The current bay with list: ", node[0])
-        node[1].print_bay()
-        print('\n')
+        # print("The current bay with list: ", node[0])
+        # print("The Crane's current location is: ", node[1].craneLocation)
+        # node[1].print_bay()
+        # print('\n')
 
         goalRes = goalTest(node[0])
     

@@ -33,6 +33,9 @@ def baseOperations(ship):
                     # Make a copy of the ship
                     new_ship = copy.deepcopy(ship)
 
+                    # Setting the parent of the new ship to the current ship
+                    new_ship.parent = ship
+
                     # set the final location of the container with it's weight and value
                     new_ship.set_value(top+1, col, value)
 
@@ -47,7 +50,7 @@ def baseOperations(ship):
 
                     # Re-setting the crane's intital location to the new container's location
                     new_ship.craneLocation = (top+1,col)
-                    print("The crane's location is: ", new_ship.craneLocation)
+                    # print("The crane's location is: ", new_ship.craneLocation)
 
                     # Appending the balance score and the new ship to the result list
                     # result.append((score, new_ship))
@@ -78,11 +81,16 @@ def unloadOperations(ship, unloadList):
             # Make a copy of the ship
             new_ship = copy.deepcopy(ship)
 
+            # Setting the parent of the new ship to the current ship
+            new_ship.parent = ship
+
             # Change the colHeight to remove the goal container
             new_ship.colHeight[column] = (top-1, bottom)
             
             # New score of the ship that has been unloaded
-            new_ship.gn = ship.gn + ship.unloadTimeFunction(row, column)
+            new_gn = ship.unloadTimeFunction(row, column)
+            new_ship.gn = ship.gn + new_gn
+            print("The old ship.gn is: ", ship.gn, "+ the new addition of: ", new_gn, " = ", new_ship.gn)
 
             # Update the bay to reflect the unloaded container
             new_ship.set_value(row, column, (0, "UNUSED"))

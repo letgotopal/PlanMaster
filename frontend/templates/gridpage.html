@@ -1,5 +1,7 @@
 {% include 'headerstuff.html' %}
 {% load static %}
+{{ manifest }}
+
 <html>
 
 <head>
@@ -7,6 +9,7 @@
 </head>
 
 <body>
+
     <h2>Grid</h2>
     Select boxes to be unloaded or click "Load" to enter containers to load.
 
@@ -15,13 +18,14 @@
     <div id='box-grid-init' style='text-align:center;'>
     </div>
 
-    <script src='../jquery/jquery-3.7.1.min.js'></script>
-
     <script type='text/javascript'>
 
         var div = document.getElementById('box-grid-init');
         div.className = 'box-grid';
-        for(let i = 0; i < 8; i++) {
+
+        var manifest = {{ manifest }};
+
+        for(let i = 7; i >= 0; i--) {
             var grow = div.appendChild(document.createElement('tr'));
             for(let j = 0; j < 12; j++) {
                 var box = grow.appendChild(document.createElement('td'));
@@ -29,29 +33,32 @@
                 box.setAttribute('box-state', 'no-select');
                 box.setAttribute('row', i);
                 box.setAttribute('col', j);
-                box.className = 'no';
-                box.innerText = 'Select\n[' + (i+1) + ',' + (j+1) + ']';
 
-                box.addEventListener('click', function(event){
-                    event.preventDefault();
-                    if(this.getAttribute('box-state') == 'no-select'){
-                        /*
-                        $.ajax({ type: "POST", url: "/run_cotton", data: {
-                            in_bot_mode: $("#in_bot_mode").val(), 
-                            in_gen_mode: $("#in_gen_mode").val(), 
-                            in_r_author: $("#in_r_author").val()
-                        }});
-                        */
-                        this.innerText = 'Remove\n[' + (i+1) + ',' + (j+1) + ']';
-                        this.className = 'yes';
-                        this.setAttribute('box-state', 'yes-select');
-                    } else if(this.getAttribute('box-state') == 'yes-select'){
-                        // $.ajax({ type: "POST", url: "/close_cotton" });
-                        this.innerText = 'Select\n[' + (i+1) + ',' + (j+1) + ']';
-                        this.className = 'no';
-                        this.setAttribute('box-state', 'no-select');
-                    }
-                });
+                if(manifest[i][j] == 1) {
+                    box.className = 'no';
+                    box.innerText = 'Select\n[' + (i+1) + ',' + (j+1) + ']';
+
+                    box.addEventListener('click', function(event){
+                        event.preventDefault();
+                        if(this.getAttribute('box-state') == 'no-select'){
+                            this.innerText = 'Remove\n[' + (i+1) + ',' + (j+1) + ']';
+                            this.className = 'yes';
+                            this.setAttribute('box-state', 'yes-select');
+                        } else if(this.getAttribute('box-state') == 'yes-select'){
+                            this.innerText = 'Select\n[' + (i+1) + ',' + (j+1) + ']';
+                            this.className = 'no';
+                            this.setAttribute('box-state', 'no-select');
+                        }
+                    });
+                }
+                else if(manifest[i][j] == 0) {
+                    box.className = 'empty';
+                    box.innerText = 'Empty\n[' + (i+1) + ',' + (j+1) + ']';;
+                }
+                else if(manifest[i][j] < 0) {
+                    box.className = 'na';
+                    box.innerText = 'N/A\n[' + (i+1) + ',' + (j+1) + ']';;
+                }
             }
         }
     </script>

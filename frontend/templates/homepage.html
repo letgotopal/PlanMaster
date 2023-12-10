@@ -1,5 +1,22 @@
+{% load static %}
 {% include 'headerstuff.html' %}
-<button>Load/Unload</button>
 <a href="{% url 'gridpage' %}" class="button">GRID</a>
-<button>Balance</button>
-<input>texttest</input>
+<head>
+    <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+</head>
+<div class="upload-ui">
+    <p>Upload the manifest here: </p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+    {% if upload_success %}
+        <p>File "{{ uploaded_file_name }}" uploaded successfully!</p>
+    {% endif %}
+</div>
+<div class="operations-buttons">
+    <button>Load/Unload</button>
+    <button>Balance</button>
+    <input>SignIn</input>
+</div>

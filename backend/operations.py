@@ -14,6 +14,8 @@ def baseOperations(ship):
         value = 'UNUSED'
         r,c = 0,0
         top, bottom = ship.colHeight[column]
+        origRow = top
+        origCol = column
         if top != bottom:
             # If so, set the value var to the value of the cell
             value = ship.get_value(top, column)
@@ -45,13 +47,16 @@ def baseOperations(ship):
                     # Update the gn score of the ship with move's score
                     new_ship.gn = ship.gn + ship.balanceTimeFunction(column, col)
 
+                    # Setting the containers previous (from the old ship) and new location on the new ship
+                    new_ship.lastMove = ((origRow, origCol), (top+1, col))
+
                     # Recalculate the colHeights of the ship
                     new_ship.calculateColHeight()
 
                     # Re-setting the crane's intital location to the new container's location
                     new_ship.craneLocation = (top+1,col)
                     # print("The crane's location is: ", new_ship.craneLocation)
-
+                    
                     # Appending the balance score and the new ship to the result list
                     # result.append((score, new_ship))
                     result.append(new_ship)
@@ -86,6 +91,9 @@ def unloadOperations(ship, unloadList):
 
             # Change the colHeight to remove the goal container
             new_ship.colHeight[column] = (top-1, bottom)
+
+            # Setting the old container location, and the new location (-1,-1) since it has been moved to a truck
+            new_ship.lastMove = ((top, column), (-1,-1))
             
             # New score of the ship that has been unloaded
             new_gn = ship.unloadTimeFunction(row, column)

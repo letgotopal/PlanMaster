@@ -26,17 +26,19 @@ def main():
 
     # res = balancingAlg.ucs(new_ship)
 
-    res = luAlg.ucs(new_ship, [(7,4), (6,4)])
+    res = balancingAlg.ucs(new_ship)
 
     print(res)
     print("The final ship's G(n) is: ", res.gn, "and it's crane values are: ", res.craneLocation)
     print("The ship's col heights are: ", res.colHeight)
+    print("The final move was: ", res.lastMove)
     res.print_bay()
     
     while(type(res.parent) != type(None)):
         res = res.parent
         print("The parent's G(n) is: ", res.gn, "and it's crane values are: ", res.craneLocation)
         print("The parent's col heights are: ", res.colHeight)
+        print("The move was: ", res.lastMove)
         res.print_bay()
     
 if __name__ == "__main__":

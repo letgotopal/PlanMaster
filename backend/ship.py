@@ -34,6 +34,11 @@ class Ship:
         # Adding a parent variable to each ship
         self.parent = parent
 
+        # Adding variable to show what the specific move from the parent ship to the current ship was
+        # Initialized to ((-1,-1),(-1,-1)) because no container has been moved on the initial ship.
+        # ((startRow,startCol), (endRow,endCol))
+        self.lastMove = ((-1,-1),(-1,-1))
+
     '''
     @function: prints the ship's bay
     @param self: the Ship object

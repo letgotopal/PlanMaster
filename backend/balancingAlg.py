@@ -38,6 +38,95 @@ def goalTest(ship):
         return True
     return False
 
+# def closetAvailCol(ship, side):
+#     colHeights = ship.colHeight
+#     left = ship.c//2
+#     right = ship.c - left
+#     closestCol = 0
+#     if side == "Left":
+#         for col in range(left):
+#             if colHeights[col][0] < 7:
+#                 closestCol = col
+#     elif side == "Right":
+#         colFound = False
+#         for col in range(right, ship.c):
+#             if colHeights[col][0] < 7 and colFound == False:
+#                 closestCol = col
+#                 colFound = True
+    
+
+
+
+#return hn for a heuristic
+def heuristic(ship):
+    leftMass = 0
+    rightMass = 0
+    balanceMass = 0
+    deficit = 0
+    leftContainers = []
+    rightContainers = []
+    closestLeftAvailableCol = 0
+    closestRightAvailableCol = 6
+    colHeights = ship.colHeight
+    hn = 0
+
+    left = ship.c//2
+    right = ship.c - left
+
+    
+    for col in range(left):
+        for row in range(ship.r):
+            if ship.get_value(row, col)[1] != "UNUSED":
+                containerMass = ship.get_value(row, col)[0]
+                leftMass += containerMass
+                leftContainers.append(col, containerMass)
+        if colHeights[col][0] < 7:
+            closestLeftAvailableCol = col
+    
+    colSetFlag = 0 #making sure we only set the first available column since we are starting next to the centerline
+    for col in range(right, ship.c):
+        for row in range(ship.r):
+            if ship.get_value(row, col)[1] != "UNUSED":
+                containerMass = ship.get_value(row, col)[0]
+                rightMass += containerMass
+                rightContainers.append(col, containerMass)
+        if colHeights[col][0] < 7 and colSetFlag == 0:
+            closestRightAvailableCol = col
+            colSetFlag = 1
+
+    balanceMass = (leftMass + rightMass)/2
+    balScore = min(leftMass, rightMass)/max(leftMass, rightMass)
+
+    if balScore > 0.9:
+        hn = 0
+        return hn
+    else:
+        #if deficit is left side
+
+        if balanceMass - leftMass > 0:
+            deficit = balanceMass - leftMass
+            rightContainers.sort(key=lambda x: x[1], reverse=True)
+            for container in rightContainers:
+                if container[1] <= deficit:
+                    hn = hn + abs(closestLeftAvailableCol - container[0]) #need closest available cols function to make better
+                    deficit = deficit - container[0]
+
+        #if deficit is right side
+
+        elif balanceMass - rightMass > 0:
+            deficit = balanceMass - rightMass
+            leftContainers.sort(key=lambda x: x[1], reverse=True)
+            for container in leftContainers:
+                if container[1] <= deficit:
+                    hn = hn + abs(closestRightAvailableCol - container[0]) #need closest available cols function to make better
+                    deficit = deficit - container[0]
+              ######What to do when surplus side does not have a container <= the deficit???? Maybe we need to look at deficit side and 
+              # see if there is a container where we can get the deficit by swapping one from deficit side for a heavier one on surplus side
+              # (where the difference between the swapped is = to deficit)      
+    return hn
+
+
+
 
 def ucs(ship):
 

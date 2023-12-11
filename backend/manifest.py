@@ -1,17 +1,5 @@
-from ship import Ship
+from .ship import Ship
 import re
-import sys
-
-sys.path.append('../frontend')
-
-from frontend.hello.models import *
-
-# save Ship object as model
-def save_ship(ship):
-    ship_grid = ShipGrid()
-    ship_grid.read_bay(ship)
-    ship_grid.save()
-    return ship_grid.id
 
 class Manifest:
     def __init__(self, positions=[], weights=[], msgs=[]):

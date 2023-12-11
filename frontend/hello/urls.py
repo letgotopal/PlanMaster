@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomePageView, LogPageView, SettingsPageView, GridPageView, ManagePageView, TutorialPageView
+from .views import HomePageView, LogPageView, GridPageView, ManagePageView, TutorialPageView
 
 urlpatterns = [
     path("manage/", ManagePageView.as_view(), name="managepage"),

@@ -15,8 +15,11 @@
 
     <button>Load</button>
 
-    <div id='box-grid-init' style='text-align:center;'>
-    </div>
+    <div id='display-select' style='text-align:center;'></div>
+    <div id='box-grid-init' style='text-align:center;'></div>
+    <div id='process-panel' style='text-align:center;'></div>
+    
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
 
     <script type='text/javascript'>
 
@@ -25,7 +28,7 @@
 
         var m_status = {{ status }};
 
-        for(let i = m_status.length - 1; i >= 0; i--) {
+        for(let i = m_status.length - 2; i >= 0; i--) {
             var grow = div.appendChild(document.createElement('tr'));
             for(let j = 0; j < m_status[0].length; j++) {
                 var box = grow.appendChild(document.createElement('td'));
@@ -61,6 +64,40 @@
                 }
             }
         }
+
+        var p_panel = document.getElementById('process-panel');
+        var processbutton = p_panel.appendChild(document.createElement('button'));
+        processbutton.innerText = 'Process';
+        processbutton.setAttribute('work-state', 'not-working');
+        processbutton.addEventListener('click', function(event){
+            event.preventDefault();
+            this.innerText = 'Working...';
+            if(this.getAttribute('work-state') == 'not-working'){
+                this.setAttribute('work-state', 'working');
+
+                var unload_r = [];
+                var unload_c = [];
+                var yes_boxes = document.getElementsByClassName('yes');
+                for(var i = 0; i < yes_boxes.length; i++) {
+                    unload_r.push(parseInt(yes_boxes[i].getAttribute('row')));
+                    unload_c.push(parseInt(yes_boxes[i].getAttribute('col')));
+                }
+
+                if(unload_r.length < 1) {
+                    alert('Please select at least one container!');
+                    this.innerText = 'Process';
+                    this.setAttribute('work-state', 'not-working');
+                }
+                else {
+                    $.ajax({ type: 'POST', url: 'process_grid', headers: {'X-CSRFToken': '{{ csrf_token }}'}, data: {
+                        unload_r: JSON.stringify(unload_r),
+                        unload_c: JSON.stringify(unload_c)
+                    }});
+                }
+                
+            }
+        });
+
     </script>
 </body>
 

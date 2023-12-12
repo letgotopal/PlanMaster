@@ -1,4 +1,7 @@
 from django.db import models
+import sys
+sys.path.append("..")
+from backend import ship
 
 # Create your models here.
 class ShipCell(models.Model):
@@ -15,9 +18,51 @@ class ShipRow(models.Model):
                 description=cell[1])
             
 class ShipGrid(models.Model):
+    # convert ship to model
     def read_bay(self,ship):
         for row in ship.bay:
             sr = self.shiprow_set.create()
             sr.read_row(row)
             sr.save()
+
+    # convert model to ship
+    def to_ship(self):
+
+        grid_rows = self.shiprow_set.all()
+        if grid_rows.count() == 0: return
+
+        grid_cols = grid_rows[0].shipcell_set.all()
+        if grid_cols.count() == 0: return
+
+        out_ship = ship.Ship(
+            r=grid_rows.count(),
+            c=grid_cols.count(),
+            bay=[[(cell.weight,cell.description) for cell in row.shipcell_set.all()] for row in grid_rows]
+        )
+
+        # recalculate heights
+        out_ship.calculateColHeight()
+
+        return out_ship
+
+
+class Instruction(models.Model):
+    start_x = models.IntegerField()
+    start_y = models.IntegerField()
+    end_x = models.IntegerField()
+    end_y = models.IntegerField()
+    description = models.CharField(max_length=255)
+    instructionlist = models.ForeignKey('InstructionList',null=True,on_delete=models.CASCADE)
+
+class InstructionList(models.Model):
+    def read_trace(self,trace):
+        for step in trace:
+            # subject to change depending on format of trace
+            s = self.instruction_set.create(
+                start_x=step.start[0],
+                start_y=step.start[1],
+                end_x=step.end[0],
+                end_y=step.end[1],
+                description=step.description
+            )
 

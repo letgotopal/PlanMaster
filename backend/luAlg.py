@@ -1,5 +1,5 @@
-from ship import Ship
-from operations import unloadOperations
+from .ship import Ship
+from .operations import unloadOperations
 
 
 '''

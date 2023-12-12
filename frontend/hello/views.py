@@ -6,7 +6,7 @@ import json
 from . import models
 import sys
 sys.path.append("..")
-from backend import manifest,ship,luAlg
+from backend import manifest,ship,luAlg,trace
 
 class HomePageView(View):
     template_name = "homepage.html"
@@ -90,19 +90,18 @@ class GridPageView(TemplateView):
         in_ship = grid_data.to_ship()
         out_ship = luAlg.ucs(in_ship,[(unload_r[i],unload_c[i]) for i in range(len(unload_r))])
 
-        ship_grid = models.ShipGrid.objects.create()
-        ship_grid.read_bay(out_ship)
-        ship_grid.save()
-        request.session['lu_after_id'] = ship_grid.pk
+        # generate trace to goal ship
+        instructs = models.InstructionList.objects.create()
+        instructs.read_trace(trace.trace(out_ship))
+        instructs.save()
+        request.session['lu_instructs_id'] = instructs.pk
 
-        print(ship_grid.pk)
+        print(request.session['lu_instructs_id'])
 
-        # NOTE: Access the stored goal ship by calling
-        # models.ShipGrid.objects.get(pk=request.session['lu_after_id'])
+        # NOTE: Access the stored instruction list by calling
+        # models.InstructionList.objects.get(pk=request.session['lu_instructs_id'])
+        # Instruction objects can be referenced by
+        # instruction_list.instruction_set.all()[index]
 
-        context={
-            'lu_after_id':ship_grid.pk
-        }
-
-        return render(request,self.template_name,context)
+        return render(request,self.template_name)
 

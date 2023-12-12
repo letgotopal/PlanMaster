@@ -59,10 +59,10 @@ class InstructionList(models.Model):
         for step in trace:
             # subject to change depending on format of trace
             s = self.instruction_set.create(
-                start_x=step.start[0],
-                start_y=step.start[1],
-                end_x=step.end[0],
-                end_y=step.end[1],
-                description=step.description
+                start_x=step.lastMove[0][0],
+                start_y=step.lastMove[0][1],
+                end_x=step.lastMove[1][0],
+                end_y=step.lastMove[1][1],
+                description=step.bay[step.lastMove[1][0]][step.lastMove[1][1]][1]
             )
 

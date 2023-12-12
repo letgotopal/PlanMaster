@@ -1,4 +1,5 @@
 from operations import baseOperations
+from sortedcontainers import SortedSet
 
 def balanceScore(ship):
     # Formula: BalanceScore = min(left, right)/max(left, right) > 0.9
@@ -42,22 +43,31 @@ def goalTest(ship):
 def ucs(ship):
 
     # Creating a frontier array to store the nodes
-    queue = []
-    visited = []
+    # queue = []
+    # visited = []
 
     # Initialize the frontier with the initial state's operations
     queue = baseOperations(ship)    
 
+    # Initializing the visited set
+    # visited = set(node for node in queue)
+    visited = set()
+
+    # Set up the frontier as a sortedset based on the gn score
+    queue = SortedSet(queue, key=lambda x: x.gn)
+
     # Sort the frontier based on the gn score
-    queue = sorted(queue, key=lambda x: x.gn)
+    # queue = sorted(queue, key=lambda x: x.gn)
     
     while(len(queue) != 0):
-        node = queue.pop(0)
+        # node = queue.pop(0)
+        node = queue[0]
+        queue.discard(node)
 
         # print("Len of queue: ", len(queue), '\n')
 
         print("The current bay with score: ", node.gn)
-        # node.print_bay()
+        node.print_bay()
         print('\n')
 
         goalRes = goalTest(node)
@@ -65,20 +75,33 @@ def ucs(ship):
         if goalRes is True:
             return node
 
-        newOperations = baseOperations(node)
-        visited.append(node)
-        appendFlag = False  
-        for newOp in newOperations:
-            if newOp not in visited:
-                inQueue = any(newOp == ships for ships in queue)
-                if inQueue:
-                    continue
-                queue.append(newOp)
-                appendFlag = True
-                
-        if appendFlag:
-            queue = sorted(queue, key=lambda x: x.gn)
+
+        if node not in visited:
+            newOperations = baseOperations(node)
+            visited.add(node)
+            visited = set(visited)
+            for newOp in newOperations:
+                if newOp not in visited:
+                    queue.add(newOp)
+            queue = SortedSet(queue, key=lambda x: x.gn)
+
+
+        # newOperations = baseOperations(node)
+        # # visited.append(node)
+        # # appendFlag = False  
+        # for newOp in newOperations:
+        #     # if newOp not in visited:
+        #     if newOp not in visited:
+
+        #     #     inQueue = any(newOp == ships for ships in queue)
+        #     #     if inQueue:
+        #     #         continue
+        #     #     queue.append(newOp)
+        #     #     appendFlag = True
+        #         visited.add(newOp)    
+        #         queue.add(newOp)
+        # if appendFlag:
+        #     queue = sorted(queue, key=lambda x: x.gn)
 
     # NEVER CALLING SIFT!!!!!!!!!!!(No sift)
     return "Can't be balanced" 
-        

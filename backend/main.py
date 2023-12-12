@@ -3,15 +3,17 @@ from ship import Ship
 import manifest
 import luAlg
 import balancingAlg
+from operations import baseOperations
+import heapq
 
 def main():
-    test_filename = "ShipCase4.txt"
-    # test_filename = "Voyager_Capt_King.txt"
+    test_filename = "ShipCase1.txt"
 
 
     testManifest = manifest.Manifest()
     new_ship = testManifest.read_manifest(test_filename)
     new_ship.print_bay()
+
 
     # new_ship.set_value(5, 4, (100, "Test"))
     
@@ -24,9 +26,9 @@ def main():
         
     # print("Neighbors:", neighbors)
 
-    # res = balancingAlg.ucs(new_ship)
+    res = balancingAlg.ucs(new_ship)
 
-    res = luAlg.ucs(new_ship, [(7,4), (6,4)])
+    # res = luAlg.ucs(new_ship, [(7,4), (6,4)])
 
     print(res)
     print("The final ship's G(n) is: ", res.gn, "and it's crane values are: ", res.craneLocation)

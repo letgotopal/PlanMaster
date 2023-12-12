@@ -59,7 +59,6 @@ def ucs(ship, uList):
     
 
 
-# Writing the G(n) approach of calculating the time taken to unload all the requested containers off the ship
 '''
 @function: Identifying the list of containers to be unloaded
 @param ship: the Ship object

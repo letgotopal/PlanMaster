@@ -1,4 +1,4 @@
-from copy import copy
+import numpy as np
 
 class Ship:
     '''
@@ -7,7 +7,7 @@ class Ship:
     @param r: the number of rows on the ship
     @param c: the number of columns on the ship
     @ param gn: the time taken to move the container from start to end
-    @param bay: the 2D array representing the ship's bay. MUST BE SUPPLIED BY THE MANIFEST ORDER TO SUCCESSFULLY DISPLAY THE ORDER
+    @param bay: the 2D NumPy array representing the ship's bay. MUST BE SUPPLIED BY THE MANIFEST ORDER TO SUCCESSFULLY DISPLAY THE ORDER
     @return: a Ship object
     '''
     def __init__(self, r=9, c=12, bay=None, gn=0, parent=None):
@@ -15,7 +15,11 @@ class Ship:
         self.c = c
 
         # Initialize bay with "UNUSED" for all elements
-        self.bay = [[(0, "UNUSED") for _ in range(c)] for _ in range(r)]
+        if bay is None:
+            self.bay = np.zeros((self.r, self.c), dtype=tuple)
+            self.bay.fill((0, "UNUSED"))
+        else:
+            self.bay = bay
 
         # Stores a tuple of the form (top, bottom) for each column
         # The top is the first instance of a container in the column
@@ -40,6 +44,7 @@ class Ship:
     @return: None
     '''
     def print_bay(self):
+        # Looping through all the r rows and c columns
         for i in range(self.r):
             for j in range(self.c):
                 print(self.bay[i][j], end=' ')
@@ -92,10 +97,12 @@ class Ship:
     @return: True if the two ships are equal, False otherwise
     '''
     def __eq__(self, other):
+        # Check if the two ships have the same dimensions
         if self.r != other.r or self.c != other.c:
             return False
 
-        if self.bay != other.bay:
+        # Check if the two ships have the same bay (i.e. 2D NP Arrays)
+        if self.bay.all() != other.bay.all():
             return False
 
         return True
@@ -138,9 +145,6 @@ class Ship:
         # Updating the result to include the crane's time taken to move to the container
         result += self.craneTimeFunction(initCol)
 
-        # Printing the entire g(n) score breakdown
-        # print('(', maxHeight, '-', initialHeight, ') + ', 'abs (', finalCol, ' - ', initCol, ')', ' + (', maxHeight, '-', finalHeight, ') + ', self.craneTimeFunction(initCol), ' = ', result, sep='')
-        
         return result
     
     '''
@@ -156,11 +160,11 @@ class Ship:
         initCraneRow = self.craneLocation[0]
         initCraneCol = self.craneLocation[1]
 
-        #note: test crane is at (4,3), we want it to get to (1,2), which should be 4 moves
-        #4-1=3 + 3-2
-
+        # Initializing the base val of maxHeight
         maxHeight = initCraneRow
-
+        
+        # For the heights between the initial and final container columns
+        # Makes sure to go a level above the max height container unless it's already at 8 (0-indexed)
         if initCraneCol < finalColumn:
             for col in range(initCraneCol+1, finalColumn):
                 if maxHeight <= colHeights[col][0] and maxHeight < 8:
@@ -174,11 +178,7 @@ class Ship:
             maxHeight = colHeights[finalColumn][0]
 
         result = abs(maxHeight- min(initCraneRow, finalRow)) + abs(initCraneCol-finalColumn)
-
-        # Printing the entire g(n) score breakdown
-        # print('abs (', maxHeight, '-', finalRow, ') + ', 'abs (', initCraneCol, ' - ', finalColumn, ')', ' = ', result, sep='')
-
-        
+       
         return result
 
 
@@ -225,15 +225,14 @@ class Ship:
         if self.craneLocation == (8,0):
             # Double the result to add the time taken by the crane
             res *= 2
-        
-            # Printing the entire g(n) score breakdown
-            # print('(', rowTot, '+', colTot, '+', shipToTruck, ') * 2 = ', res, sep='')
-        
-        # Printing the entire g(n) score breakdown outside the if statement
-        # print('(', rowTot, '+', colTot, '+', shipToTruck, ') + (', craneTime,') = ', res, sep='')
 
         return res
 
-
-
+    '''
+    @function: Hashing function for the ship that returns the hash of the bay
+    @param self: The ship to be hashed
+    @return: The hash of the ship's bay
+    '''
+    def __hash__(self):
+        return hash(self.bay.tostring())
 

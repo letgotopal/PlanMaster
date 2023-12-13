@@ -5,7 +5,7 @@ import copy
 @param ship: the Ship object
 @return: a list of tuples of the form (score, ship)
 '''
-def baseOperations(ship):
+def baseOperations(ship, mode):
     
     result = []
     
@@ -44,14 +44,20 @@ def baseOperations(ship):
                     # Reset the original location to UNUSED
                     new_ship.set_value(r, c, (0, "UNUSED"))
 
-                    # Update the gn score of the ship with move's score
-                    new_ship.gn = ship.gn + ship.balanceTimeFunction(column, col)
-
+###TESTING
+                    #new_ship.gn = ship.gn + ship.balanceTimeFunction(column, col)
+###TESTING
                     # Setting the containers previous (from the old ship) and new location on the new ship
                     new_ship.lastMove = ((origRow, origCol), (top+1, col))
 
                     # Recalculate the colHeights of the ship
                     new_ship.calculateColHeight()
+
+                    # Update the gn score of the ship with move's score
+                    if mode == 0: #mode == 0 means that we want to use the balancing heuristic
+                        new_ship.gn = ship.gn + ship.balanceTimeFunction(column, col) + new_ship.balanceHeuristic()
+                    else: #mode != 0 means that we want to use the unloading heuristic 
+                        new_ship.gn = ship.gn + ship.balanceTimeFunction(column, col)
 
                     # Re-setting the crane's intital location to the new container's location
                     new_ship.craneLocation = (top+1,col)
@@ -116,7 +122,7 @@ def unloadOperations(ship, unloadList):
             # If so, set the value var to the value of the cell
             value = ship.get_value(top, column)
             r, c = top, column
-            for ops in baseOperations(ship):
+            for ops in baseOperations(ship, 1): #mode is 1 since we are not doing a balancing problem. 0 would be balancing
                 result.append((unloadList, ops))
         else:
             print("WHY ARE YOU HERE!!")

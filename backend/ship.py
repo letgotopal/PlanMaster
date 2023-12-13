@@ -148,6 +148,81 @@ class Ship:
         
         return result
     
+
+    '''
+    @function: Calculating the H(n) i.e. the estimated time to move to a balanced ship from the current
+    @param self: The ship with the initial position of the container
+    @return: H(n) value
+    '''
+    def balanceHeuristic(self):
+        leftMass = 0
+        rightMass = 0
+        balanceMass = 0
+        deficit = 0
+        leftContainers = []
+        rightContainers = []
+        closestLeftAvailableCol = 0
+        closestRightAvailableCol = 6
+        colHeights = self.colHeight
+        hn = 0
+
+        left = self.c//2
+        right = self.c - left
+
+        
+        for col in range(left):
+            for row in range(self.r):
+                if self.get_value(row, col)[1] != "UNUSED":
+                    containerMass = self.get_value(row, col)[0]
+                    leftMass += containerMass
+                    leftContainers.append((col, containerMass))
+            if colHeights[col][0] < 7:
+                closestLeftAvailableCol = col
+        
+        colSetFlag = 0 #making sure we only set the first available column since we are starting next to the centerline
+        for col in range(right, self.c):
+            for row in range(self.r):
+                if self.get_value(row, col)[1] != "UNUSED":
+                    containerMass = self.get_value(row, col)[0]
+                    rightMass += containerMass
+                    rightContainers.append((col, containerMass))
+            if colHeights[col][0] < 7 and colSetFlag == 0:
+                closestRightAvailableCol = col
+                colSetFlag = 1
+
+        balanceMass = (leftMass + rightMass)/2
+        balScore = min(leftMass, rightMass)/max(leftMass, rightMass)
+
+        if balScore > 0.9:
+            hn = 0
+            return hn
+        else:
+            #if deficit is left side
+
+            if balanceMass - leftMass > 0:
+                deficit = balanceMass - leftMass
+                rightContainers.sort(key=lambda x: x[1], reverse=True)
+                for container in rightContainers:
+                    if container[1] <= deficit:
+                        hn = hn + abs(closestLeftAvailableCol - container[0]) #need closest available cols function to make better
+                        deficit = deficit - container[0]
+
+            #if deficit is right side
+
+            elif balanceMass - rightMass > 0:
+                deficit = balanceMass - rightMass
+                leftContainers.sort(key=lambda x: x[1], reverse=True)
+                for container in leftContainers:
+                    if container[1] <= deficit:
+                        hn = hn + abs(closestRightAvailableCol - container[0]) #need closest available cols function to make better
+                        deficit = deficit - container[0]
+                ######What to do when surplus side does not have a container <= the deficit???? Maybe we need to look at deficit side and 
+                # see if there is a container where we can get the deficit by swapping one from deficit side for a heavier one on surplus side
+                # (where the difference between the swapped is = to deficit)      
+        return hn
+    
+
+
     '''
     @function: Calculating the G(n) i.e. time taken to move the crane from origin to the goal container's pos
     @param self: The ship with the initial position of the container

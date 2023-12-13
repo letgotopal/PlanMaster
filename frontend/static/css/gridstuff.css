@@ -1,0 +1,80 @@
+.box-grid {
+    width: 90%;
+    box-sizing: border-box;
+    min-width: 200px;
+    margin: auto;
+    text-align: center;
+    padding: 10px 20px;
+    font-family: Helvetica;
+    font-size: 16px;
+}
+.box-grid td.no {
+    width: 5%;
+    min-width: 80px;
+    box-sizing: border-box;
+    margin-top: 2px;
+    margin-left: auto;
+    margin-right: auto;
+    background: #87878a;
+    border: 1px solid #ccc;
+    padding: 10px 10px;
+    text-align: center;
+    font-family: Helvetica;
+    font-size: 95%;
+    color: #18191a;
+    cursor: pointer;
+}
+.box-grid td.yes {
+    width: 5%;
+    min-width: 80px;
+    box-sizing: border-box;
+    margin-top: 2px;
+    margin-left: auto;
+    margin-right: auto;
+    background: rgb(220, 90, 38);
+    border: 1px solid #ccc;
+    padding: 10px 10px;
+    text-align: center;
+    font-family: Helvetica;
+    font-size: 95%;
+    color: #18191a;
+    cursor: pointer;
+}
+.box-grid td.empty {
+    width: 5%;
+    min-width: 80px;
+    box-sizing: border-box;
+    margin-top: 2px;
+    margin-left: auto;
+    margin-right: auto;
+    background: #bcbcc0;
+    border: 1px solid #ccc;
+    padding: 10px 10px;
+    text-align: center;
+    font-family: Helvetica;
+    font-size: 95%;
+    color: #18191a;
+}
+.box-grid td.na {
+    width: 5%;
+    min-width: 80px;
+    box-sizing: border-box;
+    margin-top: 2px;
+    margin-left: auto;
+    margin-right: auto;
+    background: #3f3f41;
+    border: 1px solid #ccc;
+    padding: 10px 10px;
+    text-align: center;
+    font-family: Helvetica;
+    font-size: 95%;
+    color: #ccc;
+}
+.box-grid td.no:hover {
+    background-color: #9ad6e4;
+    transition: 0.3s;
+}
+.box-grid td.yes:hover {
+    background-color: #e4ae9a;
+    transition: 0.3s;
+}

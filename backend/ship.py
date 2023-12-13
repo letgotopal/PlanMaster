@@ -161,9 +161,7 @@ class Ship:
         initCraneRow = self.craneLocation[0]
         initCraneCol = self.craneLocation[1]
 
-        #note: test crane is at (4,3), we want it to get to (1,2), which should be 4 moves
-        #4-1=3 + 3-2
-
+        # Initializing the base val of maxHeight
         maxHeight = initCraneRow
 
         if initCraneCol < finalColumn:

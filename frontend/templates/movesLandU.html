@@ -3,14 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moves</title>
+    <style>
+       body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-size: 3em; 
+        }
+        h1 {
+            font-size: 5em;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Moves</h1>
 
     {% for move in moves %}
-        <p>Move {{move.id}}: {{ move.origin }} to {{ move.destination }}</p>
-    {% endfor %}
+    {% if move.destination == "truck" %}
+        <p class="move-item hidden"> Move container {{ move.origin }} to a truck</p>
+    {% else %}
+        <p class="move-item hidden"> Move container {{ move.origin }} to {{ move.destination }}</p>
+    {% endif %}
+{% endfor %}
 
+    <button id="prevBtn" onclick="prevMove()">Back</button>
+    <button id="nextBtn" onclick="nextMove()">Next</button>
+
+    <a href="{% url 'gridpage' %}">
+        <button>Grid</button>
+    </a>
+
+    <script>
+        let currentMove = 0;
+        const moveItems = document.querySelectorAll('.move-item');
+        
+        function showMove(index) {
+            moveItems.forEach(item => item.classList.add('hidden'));
+            moveItems[index].classList.remove('hidden');
+        }
+
+        function nextMove() {
+            if (currentMove < moveItems.length - 1) {
+                currentMove++;
+                showMove(currentMove);
+            }
+        }
+
+        function prevMove() {
+            if (currentMove > 0) {
+                currentMove--;
+                showMove(currentMove);
+            }
+        }
+
+        showMove(currentMove);
+    </script>
 </body>
+<form id="myForm" method="post">
+    {% csrf_token %}
+    <div class="logFile-button">
+        <input type="text" name="SignIn" id="sign-in-input" placeholder="Sign In / Comment" autocomplete="off">
+        <button type="button" onclick="submitForm()">Submit</button>
+    </div>
+</form>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function submitForm() {
+        var formData = $('#myForm').serialize();
+        $.ajax({
+            type: 'POST',
+            url: '{% url "movespageU" %}',
+            data: formData,
+            success: function(response) {
+                console.log(response);
+                $('#sign-in-input').val('');
+            }
+        });
+    }
+</script>
 </html>

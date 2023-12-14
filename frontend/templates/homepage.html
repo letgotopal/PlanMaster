@@ -16,13 +16,13 @@
     {% endif %}
 </div>
 <div class="operations-buttons">
-    <button><a href="/movesLandU">Load/Unload</a></button>
+    <button><a href="/gridpage">Load/Unload</a></button>
     <button><a href="/moves">Balance</a></button>
 </div>
 <form method="post" action="{% url 'homepage' %}">
     {% csrf_token %}
 <div class="logFile-button">
-    <input type="text" name="SignIn" id="sign-in-input" placeholder="Sign In / Comment">
+    <input type="text" name="SignIn" id="sign-in-input" placeholder="Sign In / Comment" autocomplete="off">
     <button type="submit">Submit</button>
     </div>
 </form>

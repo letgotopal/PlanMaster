@@ -13,5 +13,5 @@ urlpatterns = [
     path('home/', home, name='home'),
     path('moves/', MovesView.as_view(), name='movespage'),
     path('movesLandU/', MovesLandUView.as_view(), name='movespageU'),
-    
+
 ]

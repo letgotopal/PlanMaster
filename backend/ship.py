@@ -232,6 +232,9 @@ class Ship:
         colHeights = self.colHeight
 
         for i in range(len(unloadList)):
+            if unloadList[i] == (-1, -1):
+                continue
+            hn = 1
             (unloadRow,unloadCol) = unloadList[i]
             top = colHeights[unloadCol][0]
             hn = hn + top-unloadRow

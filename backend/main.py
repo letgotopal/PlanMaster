@@ -27,12 +27,13 @@ def main():
 
     # res = balancingAlg.ucs(new_ship)
 
-    res = loadAlg.load(new_ship, [(100, 'test1'), (100, 'test2'), (100, 'test3'), (100, 'test4'), (100, 'test5'), (100, 'test6'), (100, 'test7'), (100, 'test8'),
-                                  (100, 'test1'), (100, 'test2'), (100, 'test3'), (100, 'test4'), (100, 'test5'), (100, 'test6'), (100, 'test7'), (100, 'test8'),
-                                  (100, 'test1'), (100, 'test2'), (100, 'test3'), (100, 'test4'), (100, 'test5'), (100, 'test6'), (100, 'test7'), (100, 'test8')])
-    #res = balancingAlg.ucs(new_ship)
+    # res = loadAlg.load(new_ship, [(100, 'test1'), (100, 'test2'), (100, 'test3'), (100, 'test4'), (100, 'test5'), (100, 'test6'), (100, 'test7'), (100, 'test8'),
+    #                               (100, 'test1'), (100, 'test2'), (100, 'test3'), (100, 'test4'), (100, 'test5'), (100, 'test6'), (100, 'test7'), (100, 'test8'),
+    #                               (100, 'test1'), (100, 'test2'), (100, 'test3'), (100, 'test4'), (100, 'test5'), (100, 'test6'), (100, 'test7'), (100, 'test8')])
+    # #res = balancingAlg.ucs(new_ship)
     
-    res = luAlg.ucs(new_ship, [(1,2), (2,2)])
+    
+    res = luAlg.ucs(new_ship, [(1,1), (2,1), (0,2)])
 
     print(res)
     print("The final ship's G(n) is: ", res.gn, "and it's crane values are: ", res.craneLocation)
@@ -40,12 +41,12 @@ def main():
     print("The final move was: ", res.lastMove)
     res.print_bay()
     
-    # while(type(res.parent) != type(None)):
-    #     res = res.parent
-    #     print("The parent's G(n) is: ", res.gn, "and it's crane values are: ", res.craneLocation)
-    #     print("The parent's col heights are: ", res.colHeight)
-    #     print("The move was: ", res.lastMove)
-    #     res.print_bay()
+    while(type(res.parent) != type(None)):
+        res = res.parent
+        print("The parent's G(n) is: ", res.gn, "and it's crane values are: ", res.craneLocation)
+        print("The parent's col heights are: ", res.colHeight)
+        print("The move was: ", res.lastMove)
+        res.print_bay()
     
 if __name__ == "__main__":
     main()

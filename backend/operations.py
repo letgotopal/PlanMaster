@@ -125,8 +125,8 @@ def baseUnloadOperations(ship, unloadList):
                     new_ship.calculateColHeight()
 
                     # Update the gn score of the ship with move's score
-                    new_ship.gn = ship.gn + ship.balanceTimeFunction(column, col)
-                    #new_ship.gn = ship.gn + ship.balanceTimeFunction(column, col) + new_ship.unloadHeuristic(unloadList)
+                    #new_ship.gn = ship.gn + ship.balanceTimeFunction(column, col)
+                    new_ship.gn = ship.gn + ship.balanceTimeFunction(column, col) + new_ship.unloadHeuristic(unloadList)
 
                     # Re-setting the crane's intital location to the new container's location
                     new_ship.craneLocation = (top+1,col)
@@ -174,7 +174,7 @@ def unloadOperations(ship, unloadList):
             # Setting the old container location, and the new location (-1,-1) since it has been moved to a truck
             new_ship.lastMove = ((top, column), (-1,-1))
             
-            new_gn = ship.unloadTimeFunction(row, column)
+            #new_gn = ship.unloadTimeFunction(row, column)
 
             # Update the bay to reflect the unloaded container
             new_ship.set_value(row, column, (0, "UNUSED"))
@@ -185,7 +185,7 @@ def unloadOperations(ship, unloadList):
 
             # New score of the ship that has been unloaded
             #new_gn = ship.unloadTimeFunction(row, column)
-            #new_gn = ship.unloadTimeFunction(row, column) + new_ship.unloadHeuristic(newUnloadList)
+            new_gn = ship.unloadTimeFunction(row, column) + new_ship.unloadHeuristic(newUnloadList)
             new_ship.gn = ship.gn + new_gn
             print("The old ship.gn is: ", ship.gn, "+ the new addition of: ", new_gn, " = ", new_ship.gn)
 

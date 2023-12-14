@@ -1,4 +1,4 @@
-from operations import baseOperations
+from operations import balancingOperations
 
 def balanceScore(ship):
     # Formula: BalanceScore = min(left, right)/max(left, right) > 0.9
@@ -48,7 +48,7 @@ def ucs(ship):
     visited = []
 
     # Initialize the frontier with the initial state's operations
-    queue = baseOperations(ship, 0) #mode is 0 because we are balancing    
+    queue = balancingOperations(ship, 0) #mode is 0 because we are balancing    
 
     # Sort the frontier based on the gn score
     queue = sorted(queue, key=lambda x: x.gn)
@@ -67,7 +67,7 @@ def ucs(ship):
         if goalRes is True:
             return node
 
-        newOperations = baseOperations(node, 0) # mode is 0 because we are balancing
+        newOperations = balancingOperations(node, 0) # mode is 0 because we are balancing
         visited.append(node)
         appendFlag = False  
         for newOp in newOperations:

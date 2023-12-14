@@ -151,7 +151,7 @@ class Ship:
 
     '''
     @function: Calculating the H(n) i.e. the estimated time to move to a balanced ship from the current
-    @param self: The ship with the initial position of the container
+    @param self: The ship with the final position of the container
     @return: H(n) value
     '''
     def balanceHeuristic(self):
@@ -198,7 +198,7 @@ class Ship:
             return hn
         else:
             #if deficit is left side
-
+            hn = 1
             if balanceMass - leftMass > 0:
                 deficit = balanceMass - leftMass
                 rightContainers.sort(key=lambda x: x[1], reverse=True)
@@ -221,6 +221,22 @@ class Ship:
                 # (where the difference between the swapped is = to deficit)      
         return hn
     
+
+    '''
+    @function: Calculating the H(n) i.e. the estimated time to move to an unloaded ship from the current
+    @param self: The ship with the final position of the container
+    @return: H(n) value
+    '''
+    def unloadHeuristic(self, unloadList):
+        hn = 0
+        colHeights = self.colHeight
+
+        for i in range(len(unloadList)):
+            (unloadRow,unloadCol) = unloadList[i]
+            top = colHeights[unloadCol][0]
+            hn = hn + top-unloadRow
+        
+        return hn
 
 
     '''

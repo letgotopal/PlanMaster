@@ -251,7 +251,8 @@ def loadOperation(ship, loadContainer):
     # Setting the value of the cell to the container
     row = new_ship.colHeight[minCol][0]
     new_ship.set_value(row, minCol, loadContainer)
-
+    
+    new_ship.lastMove((-1,-1),(row, minCol))
     # Setting the crane to the new final location as the container
     new_ship.craneLocation = (row, minCol)
 

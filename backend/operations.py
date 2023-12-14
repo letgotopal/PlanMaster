@@ -3,7 +3,7 @@ import copy
 ''''
 @function:this is the operations for balancing a ship
 @param ship: the Ship object
-@return: a list of tuples of the form (score, ship)
+@return: a list of expanded ships
 '''
 def balancingOperations(ship, mode):
     
@@ -251,9 +251,72 @@ def loadOperation(ship, loadContainer):
     # Setting the value of the cell to the container
     row = new_ship.colHeight[minCol][0]
     new_ship.set_value(row, minCol, loadContainer)
-
+    
+    new_ship.lastMove((-1,-1),(row, minCol))
     # Setting the crane to the new final location as the container
     new_ship.craneLocation = (row, minCol)
 
     # Returning the new ship
     return new_ship
+
+
+''''
+@function: SIFT algorithm operations
+@param ship: the Ship object
+@param goal: the goal state of the ship
+@return: a list of ships that could possibly be the goal state
+'''
+def siftOperations(ship, goal):
+    
+    result = []
+    
+    # 12 columns = 144 possible new ship states
+    for column in range(ship.c):
+        value = 'UNUSED'
+        r,c = 0,0
+        top, bottom = ship.colHeight[column]
+        origRow = top
+        origCol = column
+        if top != bottom:
+            # If so, set the value var to the value of the cell
+            value = ship.get_value(top, column)
+            r, c = top, column
+        else:
+            continue
+        
+        for col in range(ship.c):
+            # Check if the cell is not empty
+            if col == column:
+                continue
+
+            top, bottom = ship.colHeight[col]
+            if bottom != ship.r:
+                if top != ship.r:
+                    
+                    # Make a copy of the ship
+                    new_ship = copy.deepcopy(ship)
+
+                    # Setting the parent of the new ship to the current ship
+                    new_ship.parent = ship
+
+                    # set the final location of the container with it's weight and value
+                    new_ship.set_value(top+1, col, value)
+
+                    # Reset the original location to UNUSED
+                    new_ship.set_value(r, c, (0, "UNUSED"))
+
+                    # Setting the containers previous (from the old ship) and new location on the new ship
+                    new_ship.lastMove = ((origRow, origCol), (top+1, col))
+
+                    # Recalculate the colHeights of the ship
+                    new_ship.calculateColHeight()
+
+                    new_ship.gn = ship.gn + ship.balanceTimeFunction(column, col) + new_ship.siftHeuristic(goal)
+
+                    # Re-setting the crane's intital location to the new container's location
+                    new_ship.craneLocation = (top+1,col)
+                    
+                    # Appending the balance score and the new ship to the result list
+                    result.append(new_ship)
+
+    return result

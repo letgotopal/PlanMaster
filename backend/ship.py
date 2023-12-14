@@ -332,5 +332,19 @@ class Ship:
         return res
 
 
+    # Not a perfect heuristic, but it's a start
+    '''
+    @function: SIFTING heuristic function
+    @param self: The ship with the initial position of the container
+    @param goal: The goal state of the ship
+    @return: An int value of the H(n) score
+    '''
+    def siftHeuristic(self, goal):
+        hn = 0
+        for col in range(self.c):
+            for row in range(self.r):
+                if self.get_value(row, col)[1] != goal.get_value(row, col)[1]:
+                    hn += 1
+        return hn
 
 

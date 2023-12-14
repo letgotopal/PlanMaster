@@ -1,3 +1,5 @@
+from operations import balancingOperations
+from siftAlg import ucs as siftAlg
 
 def balanceScore(ship):
     # Formula: BalanceScore = min(left, right)/max(left, right) > 0.9
@@ -80,6 +82,8 @@ def ucs(ship):
         if appendFlag:
             queue = sorted(queue, key=lambda x: x.gn)
 
+    # if couldn't balance, call sift
+    newShip = siftAlg(ship)
+    return newShip
     # NEVER CALLING SIFT!!!!!!!!!!!(No sift)
-    return "Can't be balanced" 
-        
+    # return "Can't be balanced" 

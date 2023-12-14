@@ -187,6 +187,8 @@ def home(request):
 class MovesView(View):
     def get(self, request):
         test_filename = SharedData.upload_path
+        if SharedData.upload_path is None:
+            return redirect('home')
         testManifest = Manifest()
         new_ship = testManifest.read_manifest(test_filename)
 
@@ -211,67 +213,62 @@ class MovesView(View):
 
         context = {'moves': moves_data}
         return render(request, 'moves.html', context)
-'''  
+    
+    template_name = "moves.html"
+    def post(self, request, *args, **kwargs):
+        sign_in_name = request.POST.get('SignIn', '')
+        if sign_in_name:
+            file_path = '/Users/mohamed/Desktop/PlanMaster/frontend/LogInFile/LogIn.txt'
+            los_angeles_time = datetime.now()
+            timestamp = los_angeles_time.strftime("%m-%d-%Y %H:%M:%S")
+            with open(file_path, 'a') as file:
+                file.write(f'{sign_in_name} - {timestamp}\n')
+
+        return render(request, self.template_name, {'sign_in_name': sign_in_name})
+
 class MovesLandUView(View):
     def get(self, request):
-        test_filename = "backend/ShipCase1.txt"
-        testManifest = Manifest()
-        new_ship = testManifest.read_manifest(test_filename)
-        anylist = [(1,3)]
-
-        res = luAlg.ucs(new_ship, anylist)
-
-        moves_data = []
-
-        while True:
-            move_info = {
-            "origin": res.lastMove[0],
-             "destination": res.lastMove[1],
-                }
-            moves_data.append(move_info)
-
-            if res.parent is None:
-                break
-
-            res = res.parent
-            
-        moves_data.pop()
-        moves_data.reverse() 
-
-        context = {'moves': moves_data}
-        return render(request, 'movesLandU.html', context)
-'''
-class MovesLandUView(View):
-    def get(self, request):
-        test_filename = SharedData.upload_path
-        testManifest = Manifest()
-        new_ship = testManifest.read_manifest(test_filename)
 
         instruction_list = get_object_or_404(InstructionList, pk=request.session['lu_instructs_id'])
 
         instructions = instruction_list.instruction_set.all()
 
-        res = luAlg.ucs(new_ship, [(instruction.start_x, instruction.start_y) for instruction in instructions])
-
         moves_data = []
 
-        while True:
+        for instruction in instructions:
+            initial_destination = (instruction.start_x + 1, instruction.start_y + 1)
+            final_destination = (instruction.end_x + 1, instruction.end_y + 1)
+
+            if initial_destination == (0,0):
+                initial_destination = (instruction.description)
+
+            if final_destination == (0,0):
+                final_destination = "truck"
+            
+
             move_info = {
-            "origin": tuple(x + 1 for x in res.lastMove[0]),
-            "destination": tuple(x + 1 for x in res.lastMove[1]),
+                "origin": (instruction.start_x + 1, instruction.start_y + 1),
+                "destination": final_destination,
             }
             moves_data.append(move_info)
-
-            if res.parent is None:
-                break
-
-            res = res.parent
-
-        moves_data.pop()
-        moves_data.reverse()
+        
+        moves_data.pop(0)
 
         context = {'moves': moves_data}
         return render(request, 'movesLandU.html', context)
+    
+    template_name = "movesLandU.html"
+    def post(self, request, *args, **kwargs):
+        sign_in_name = request.POST.get('SignIn', '')
+        if sign_in_name:
+            file_path = '/Users/mohamed/Desktop/PlanMaster/frontend/LogInFile/LogIn.txt'
+            los_angeles_time = datetime.now()
+            timestamp = los_angeles_time.strftime("%m-%d-%Y %H:%M:%S")
+            with open(file_path, 'a') as file:
+                file.write(f'{sign_in_name} - {timestamp}\n')
+
+        return render(request, self.template_name, {'sign_in_name': sign_in_name})
+    
 class TutorialPageView(TemplateView):
     template_name = "tutorialpage.html"
 

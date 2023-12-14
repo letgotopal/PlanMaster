@@ -65,4 +65,3 @@ class InstructionList(models.Model):
                 end_y=step.lastMove[1][1],
                 description=step.bay[step.lastMove[1][0]][step.lastMove[1][1]][1][:255]
             )
-

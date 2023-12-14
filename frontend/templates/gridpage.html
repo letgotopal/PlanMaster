@@ -25,7 +25,9 @@
         var load_list = [];
         load_button.onclick = function(){
             var load_text = prompt('Enter description of container to load:');
-            if(load_text) load_list.push(load_text);
+            var load_weight = prompt('Enter weight of the container:');
+            if(load_text && load_weight) load_list.push([load_weight,load_text]);
+            else alert('Please input valid entry!')
         }
 
         var div = document.getElementById('box-grid-init');
@@ -88,7 +90,7 @@
                     unload_c.push(parseInt(yes_boxes[i].getAttribute('col')));
                 }
 
-                if(unload_r.length < 1) {
+                if(unload_r.length + load_list.length < 1) {
                     alert('Please select at least one container!');
                     this.innerText = 'Process';
                     this.setAttribute('work-state', 'not-working');
@@ -98,6 +100,8 @@
                         unload_r: JSON.stringify(unload_r),
                         unload_c: JSON.stringify(unload_c),
                         load_list: JSON.stringify(load_list)
+                    }, complete: function(response){
+                        window.location.replace('/movesLandU');
                     }});
                 }
                 

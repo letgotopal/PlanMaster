@@ -207,3 +207,53 @@ def unloadOperations(ship, unloadList):
 
     return result
 
+'''
+@function: Generates the most efficient load operation for the ship
+@param ship: the Ship object
+@param container: the container to be loaded
+@return: The ship which has the container loaded in the most optimal position
+'''
+
+def loadOperation(ship, loadContainer):
+    
+    # Calculating the time taken for the crane to get back to the edge of the ship
+    # Adds zero if the crane is already at the edge of the ship
+    ship.gn += ((ship.r - 1) - ship.craneLocation[0]) + (0 - ship.craneLocation[1])
+    
+    # Resetting the crane's location to the edge of the ship for loads
+    ship.craneLocation = (8,0)
+
+    # Calculate the first one before going through the loop
+    # Setting minTime an arbitrarily large value
+    minTime = 10000
+    minCol = 0 
+
+    for col in range(ship.c):
+        curTime = ship.craneTimeFunction(col)
+        if minTime >= curTime and ship.colHeight[col][0] < 7:
+            minTime = curTime
+            minCol = col
+    
+    # Checking if the ship is full
+    if minTime == 10000:
+        print("The ship is full, cannot load anymore containers")
+        return -1
+
+    # Getting a deep copy of the ship
+    new_ship = copy.deepcopy(ship)
+
+    # Update the gn score of the ship with move's score
+    new_ship.gn = ship.gn + minTime
+
+    # Updating the colHeights of the ship
+    new_ship.colHeight[minCol] = (new_ship.colHeight[minCol][0] + 1, new_ship.colHeight[minCol][1])
+    
+    # Setting the value of the cell to the container
+    row = new_ship.colHeight[minCol][0]
+    new_ship.set_value(row, minCol, loadContainer)
+
+    # Setting the crane to the new final location as the container
+    new_ship.craneLocation = (row, minCol)
+
+    # Returning the new ship
+    return new_ship

@@ -26,7 +26,7 @@ def main():
 
     #res = balancingAlg.ucs(new_ship)
     
-    res = luAlg.ucs(new_ship, [(1,2), (2,2), (0,3), (0,4)])
+    res = luAlg.ucs(new_ship, [(1,2), (2,2)])
 
     print(res)
     print("The final ship's G(n) is: ", res.gn, "and it's crane values are: ", res.craneLocation)

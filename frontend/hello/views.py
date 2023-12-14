@@ -125,7 +125,7 @@ class GridPageView(TemplateView):
     def post(self,request):
         unload_r = json.loads(request.POST.get('unload_r'))
         unload_c = json.loads(request.POST.get('unload_c'))
-        load_list = json.loads(request.POST.get('load_list'))
+        load_list = [(int(e[0]),e[1]) for e in json.loads(request.POST.get('load_list'))]
         
         print(unload_r,unload_c)
         print(load_list)
@@ -135,11 +135,17 @@ class GridPageView(TemplateView):
         # convert model to ship and run ucs
         in_ship = grid_data.to_ship()
         out_ship = luAlg.ucs(in_ship,[(unload_r[i],unload_c[i]) for i in range(len(unload_r))])
-        out_ship_load = []
+        out_ship_load = loadAlg.load(out_ship,load_list)
+
+        # save out ship model for later manifest access
+        out_grid = models.ShipGrid.objects.create()
+        out_grid.read_bay(out_ship_load)
+        out_grid.save()
+        request.session['lu_after_id'] = out_grid.pk
 
         # generate trace to goal ship
         instructs = models.InstructionList.objects.create()
-        instructs.read_trace(trace.trace(out_ship))
+        instructs.read_trace(trace.trace(out_ship_load))
         instructs.save()
         request.session['lu_instructs_id'] = instructs.pk
 

@@ -135,7 +135,7 @@ class GridPageView(TemplateView):
         # convert model to ship and run ucs
         in_ship = grid_data.to_ship()
         out_ship = luAlg.ucs(in_ship,[(unload_r[i],unload_c[i]) for i in range(len(unload_r))])
-        out_ship_load = 
+        out_ship_load = []
 
         # generate trace to goal ship
         instructs = models.InstructionList.objects.create()

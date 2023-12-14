@@ -1,4 +1,4 @@
-from operations import balancingOperations
+from .operations import baseOperations
 
 def balanceScore(ship):
     # Formula: BalanceScore = min(left, right)/max(left, right) > 0.9

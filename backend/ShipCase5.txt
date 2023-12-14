@@ -1,17 +1,17 @@
-[01,01], {00000}, UNUSED
-[01,02], {00150}, Wal-mart Inc
-[01,03], {00000}, UNUSED
-[01,04], {00000}, UNUSED
-[01,05], {00000}, UNUSED
-[01,06], {00000}, UNUSED
+[01,01], {00000}, NAN
+[01,02], {00096}, Cat
+[01,03], {00008}, Dog
+[01,04], {00004}, Pig
+[01,05], {00004}, Hen
+[01,06], {00001}, Rat
 [01,07], {00000}, UNUSED
 [01,08], {00000}, UNUSED
 [01,09], {00000}, UNUSED
 [01,10], {00000}, UNUSED
 [01,11], {00000}, UNUSED
-[01,12], {00000}, UNUSED
-[02,01], {00200}, Dicks Sporting Goods Co.
-[02,02], {00390}, Adidas Co.
+[01,12], {00000}, NAN
+[02,01], {00000}, UNUSED
+[02,02], {00000}, UNUSED
 [02,03], {00000}, UNUSED
 [02,04], {00000}, UNUSED
 [02,05], {00000}, UNUSED
@@ -21,9 +21,9 @@
 [02,09], {00000}, UNUSED
 [02,10], {00000}, UNUSED
 [02,11], {00000}, UNUSED
-[02,12], {08100}, Wheeler Motors (Note: CAR INSIDE, HANDLE WITH CARE)
-[03,01], {00850}, John Deere Co.(Note: Heavy Machinery, handle with care)
-[03,02], {00011}, Provogue Ltd.
+[02,12], {00000}, UNUSED
+[03,01], {00000}, UNUSED
+[03,02], {00000}, UNUSED
 [03,03], {00000}, UNUSED
 [03,04], {00000}, UNUSED
 [03,05], {00000}, UNUSED
@@ -34,8 +34,8 @@
 [03,10], {00000}, UNUSED
 [03,11], {00000}, UNUSED
 [03,12], {00000}, UNUSED
-[04,01], {00583}, Evergreen Shipping Co.
-[04,02], {00255}, Frito-Lay Co. (Note: Loose Boxes inside, contact HQ for instructions)
+[04,01], {00000}, UNUSED
+[04,02], {00000}, UNUSED
 [04,03], {00000}, UNUSED
 [04,04], {00000}, UNUSED
 [04,05], {00000}, UNUSED
@@ -46,8 +46,8 @@
 [04,10], {00000}, UNUSED
 [04,11], {00000}, UNUSED
 [04,12], {00000}, UNUSED
-[05,01], {00450}, Apple Inc. (Note: Priority Delivery, contact details attached inside)
-[05,02], {00090}, Ford Motor Co.
+[05,01], {00000}, UNUSED
+[05,02], {00000}, UNUSED
 [05,03], {00000}, UNUSED
 [05,04], {00000}, UNUSED
 [05,05], {00000}, UNUSED
@@ -58,20 +58,20 @@
 [05,10], {00000}, UNUSED
 [05,11], {00000}, UNUSED
 [05,12], {00000}, UNUSED
-[06,01], {00889}, Autozone International Inc.
-[06,02], {00119}, Wal-Mart Inc.
+[06,01], {00000}, UNUSED
+[06,02], {00000}, UNUSED
 [06,03], {00000}, UNUSED
 [06,04], {00000}, UNUSED
-[06,05], {00100}, Test
+[06,05], {00000}, UNUSED
 [06,06], {00000}, UNUSED
 [06,07], {00000}, UNUSED
 [06,08], {00000}, UNUSED
 [06,09], {00000}, UNUSED
 [06,10], {00000}, UNUSED
 [06,11], {00000}, UNUSED
-[06,12], {05002}, Mr. Adrian Ross (Note: Private Charter)
-[07,01], {06831}, 7-Eleven Routine Coffee Shipment Columbia.
-[07,02], {00050}, Coffee Day Coffee Co.
+[06,12], {00000}, UNUSED
+[07,01], {00000}, UNUSED
+[07,02], {00000}, UNUSED
 [07,03], {00000}, UNUSED
 [07,04], {00000}, UNUSED
 [07,05], {00000}, UNUSED
@@ -82,8 +82,8 @@
 [07,10], {00000}, UNUSED
 [07,11], {00000}, UNUSED
 [07,12], {00000}, UNUSED
-[08,01], {00078}, Samsung Inc. (Note: Electronics, HANDLE WITH CARE)
-[08,02], {00300}, Kaiser Permanante (Note: HIGH PRIORITY, MEDICAL SUPPLIES contact Anahiem Office)
+[08,01], {00000}, UNUSED
+[08,02], {00000}, UNUSED
 [08,03], {00000}, UNUSED
 [08,04], {00000}, UNUSED
 [08,05], {00000}, UNUSED

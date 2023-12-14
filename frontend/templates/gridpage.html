@@ -1,6 +1,5 @@
 {% include 'headerstuff.html' %}
 {% load static %}
-{{ status }}
 
 <html>
 
@@ -13,8 +12,7 @@
     <h2>Grid</h2>
     Select boxes to be unloaded or click "Load" to enter containers to load.
 
-    <button>Load</button>
-
+    <button id="load-button">Load</button>
     <div id='display-select' style='text-align:center;'></div>
     <div id='box-grid-init' style='text-align:center;'></div>
     <div id='process-panel' style='text-align:center;'></div>
@@ -22,6 +20,13 @@
     <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
 
     <script type='text/javascript'>
+
+        var load_button = document.getElementById('load-button');
+        var load_list = [];
+        load_button.onclick = function(){
+            var load_text = prompt('Enter description of container to load:');
+            if(load_text) load_list.push(load_text);
+        }
 
         var div = document.getElementById('box-grid-init');
         div.className = 'box-grid';
@@ -91,7 +96,8 @@
                 else {
                     $.ajax({ type: 'POST', url: 'process_grid', headers: {'X-CSRFToken': '{{ csrf_token }}'}, data: {
                         unload_r: JSON.stringify(unload_r),
-                        unload_c: JSON.stringify(unload_c)
+                        unload_c: JSON.stringify(unload_c),
+                        load_list: JSON.stringify(load_list)
                     }});
                 }
                 

@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from .forms import UploadFileForm
 from django.views import View
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from datetime import datetime
 from django.http import HttpResponse
 from django.conf import settings
@@ -13,7 +13,7 @@ import sys
 sys.path.append("..")
 from backend.manifest import Manifest
 from backend.ship import Ship
-from backend import luAlg, trace, balancingAlg, manifest
+from backend import luAlg, trace, balancingAlg, manifest, loadAlg
 from .models import InstructionList, Instruction
     
 '''
@@ -51,6 +51,7 @@ class HomePageView(View):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             uploaded_file = request.FILES['file']
+            
             # Process the uploaded file as needed
             # For example, save the file to a specific location
             upload_path = os.path.join('ManifestUploads', uploaded_file.name)
@@ -124,14 +125,17 @@ class GridPageView(TemplateView):
     def post(self,request):
         unload_r = json.loads(request.POST.get('unload_r'))
         unload_c = json.loads(request.POST.get('unload_c'))
-
+        load_list = json.loads(request.POST.get('load_list'))
+        
         print(unload_r,unload_c)
+        print(load_list)
 
         grid_data = models.ShipGrid.objects.get(pk=request.session['lu_before_id'])
 
         # convert model to ship and run ucs
         in_ship = grid_data.to_ship()
         out_ship = luAlg.ucs(in_ship,[(unload_r[i],unload_c[i]) for i in range(len(unload_r))])
+        out_ship_load = []
 
         # generate trace to goal ship
         instructs = models.InstructionList.objects.create()
@@ -146,7 +150,7 @@ class GridPageView(TemplateView):
         # Instruction objects can be referenced by
         # instruction_list.instruction_set.all()[index]
 
-        return render(request,self.template_name)
+        return redirect('movespageU')
     
 def download_txt(request):
     file_path = "/Users/mohamed/Desktop/PlanMaster/frontend/LogInFile/LogIn.txt"

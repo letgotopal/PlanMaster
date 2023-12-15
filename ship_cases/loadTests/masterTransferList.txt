@@ -1,0 +1,35 @@
+Here, I will be providing instructions on how to execute the various edge-cases designed to test the loading features
+
+Test1: Loading no containers to a Ship:
+In this case, we are testing what happens when no containers are provided to load during running the load function. This would mean the user supplies nothing
+Use the file loadNone.txt to perform this task
+Step 1: Upload the file loadNone.txt using the Choose File button
+Step 2: Click on upload to successfully upload the file
+Step 3: Click ont the Load/Unload button to proceed with the unload
+Step 4: In the grid page, click on Process, thereby skipping the loading function
+Result: You should recieve an error stating "Please select at least one container!"
+
+Test2: Loading multiple containers to the Ship:
+In this case, we are testing what happens when multiple containers are provided to load.
+Use the file loadMany.txt to perform this task
+Step 1: Upload the file loadMany.txt using the Choose File button
+Step 2: Click on upload to successfully upload the file
+Step 3: Click ont the Load/Unload button to proceed with the unload
+Step 4: In the grid page, click on the Load button to begin entering the boxes to load
+Step 5: In the pop-up for "Enter description of container to load:" enter a desired "Name" for your container
+Step 6: For the next pop-up "Enter weight of the container:" enter  a desired "Weight" for your container
+Step 7: Repeat steps 4 - 6 '3' times
+Result: You should see that the 1st Containers goes to (4,2), 2nd to (5,2), 3rd to (6,2) and the last to (7,2)
+
+Test3: Loading containers to a full Ship:
+In this case, we are testing what happens when multiple containers are provided to load.
+Use the file loadFull.txt to perform this task
+In this case, we are testing what happens when multiple containers are provided to load.
+Use the file loadFull.txt to perform this task
+Step 1: Upload the file loadMany.txt using the Choose File button
+Step 2: Click on upload to successfully upload the file
+Step 3: Click ont the Load/Unload button to proceed with the unload
+Step 4: In the grid page, click on the Load button to begin entering the boxes to load
+Step 5: In the pop-up for "Enter description of container to load:" enter a desired "Name" for your container
+Step 6: For the next pop-up "Enter weight of the container:" enter  a desired "Weight" for your container
+Result: You should recieve an error message stating that the ship is full and it cannot load any more containers

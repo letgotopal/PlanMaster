@@ -1,4 +1,9 @@
+# For Frontend:
 from .ship import Ship
+
+# For backend:
+# from ship import Ship
+
 import re
 
 class Manifest:

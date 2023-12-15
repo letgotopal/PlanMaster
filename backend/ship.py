@@ -1,7 +1,5 @@
 from copy import copy
 
-from copy import copy
-
 class Ship:
     '''
     @function: constructor for the Ship class

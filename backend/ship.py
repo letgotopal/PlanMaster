@@ -14,7 +14,6 @@ class Ship:
     @return: a Ship object
     '''
     def __init__(self, r=9, c=12, bay=None, gn=0, parent=None):
-    def __init__(self, r=9, c=12, bay=None, gn=0, parent=None):
         self.r = r
         self.c = c
 

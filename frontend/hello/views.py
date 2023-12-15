@@ -39,6 +39,7 @@ class HomePageView(View):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             uploaded_file = request.FILES['file']
+            
             # Process the uploaded file as needed
             # For example, save the file to a specific location
             upload_path = os.path.join('ManifestUploads', uploaded_file.name)
@@ -113,19 +114,27 @@ class GridPageView(TemplateView):
     def post(self,request):
         unload_r = json.loads(request.POST.get('unload_r'))
         unload_c = json.loads(request.POST.get('unload_c'))
-
+        load_list = [(int(e[0]),e[1]) for e in json.loads(request.POST.get('load_list'))]
+        
         print(unload_r,unload_c)
+        print(load_list)
 
         grid_data = models.ShipGrid.objects.get(pk=request.session['lu_before_id'])
 
         # convert model to ship and run ucs
         in_ship = grid_data.to_ship()
         out_ship = luAlg.ucs(in_ship,[(unload_r[i],unload_c[i]) for i in range(len(unload_r))])
-        
+        out_ship_load = loadAlg.load(out_ship,load_list)
+
+        # save out ship model for later manifest access
+        out_grid = models.ShipGrid.objects.create()
+        out_grid.read_bay(out_ship_load)
+        out_grid.save()
+        request.session['lu_after_id'] = out_grid.pk
 
         # generate trace to goal ship
         instructs = models.InstructionList.objects.create()
-        instructs.read_trace(trace.trace(out_ship))
+        instructs.read_trace(trace.trace(out_ship_load))
         instructs.save()
         request.session['lu_instructs_id'] = instructs.pk
 
@@ -136,7 +145,7 @@ class GridPageView(TemplateView):
         # Instruction objects can be referenced by
         # instruction_list.instruction_set.all()[index]
 
-        return render(request,self.template_name)
+        return redirect('movespageU')
     
 def download_txt(request):
     file_path = os.path.join('LogInFile', 'LogIn.txt')

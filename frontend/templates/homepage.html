@@ -1,6 +1,5 @@
 {% load static %}
 {% include 'headerstuff.html' %}
-<a href="{% url 'gridpage' %}" class="button">GRID</a>
 <head>
     <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
 </head>
@@ -16,7 +15,7 @@
     {% endif %}
 </div>
 <div class="operations-buttons">
-    <button><a href="/gridpage">Load/Unload</a></button>
+    <a href="{% url 'gridpage' %}"><button>Load/Unload</button></a>
     <button><a href="/moves">Balance</a></button>
 </div>
 <form method="post" action="{% url 'homepage' %}">

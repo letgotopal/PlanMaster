@@ -198,8 +198,8 @@ def unloadOperations(ship, unloadList):
         #elif top != row:
     print("NOT ROW")
     # If so, set the value var to the value of the cell
-    value = ship.get_value(top, column)
-    r, c = top, column
+    # value = ship.get_value(top, column)
+    # r, c = top, column
     for ops in baseUnloadOperations(ship, unloadList):
         result.append((unloadList, ops))
     #else:
@@ -241,6 +241,9 @@ def loadOperation(ship, loadContainer):
 
     # Getting a deep copy of the ship
     new_ship = copy.deepcopy(ship)
+
+    # Setting the parent of the new ship to the current ship
+    new_ship.parent = ship
 
     # Update the gn score of the ship with move's score
     new_ship.gn = ship.gn + minTime

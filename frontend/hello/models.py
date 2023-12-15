@@ -65,14 +65,3 @@ class InstructionList(models.Model):
                 end_y=step.lastMove[1][1],
                 description=step.bay[step.lastMove[1][0]][step.lastMove[1][1]][1][:255]
             )
-
-class LoadBox(models.Model):
-    description = models.CharField(max_length=255)
-    loadlist = models.ForeignKey('LoadList',null=True,on_delete=models.CASCADE)
-
-class LoadList(models.Model):
-    def read_list(self,list):
-        for s in list:
-            b = self.loadbox_set.create(
-                description=s[:255]
-            )

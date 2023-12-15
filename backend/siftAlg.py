@@ -1,5 +1,5 @@
-from ship import Ship
-from operations import siftOperations
+from .ship import Ship
+from .operations import siftOperations
 import copy
 
 def goalBuilder(ship):

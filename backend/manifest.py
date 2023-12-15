@@ -1,4 +1,9 @@
+# For Frontend:
 from .ship import Ship
+
+# For backend:
+# from ship import Ship
+
 import re
 
 class Manifest:
@@ -88,4 +93,3 @@ class Manifest:
     def print_manifest(self):
         for i in range(len(self.positions)):
             print(self.positions[i], self.weights[i], self.msgs[i])
-

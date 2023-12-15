@@ -7,6 +7,7 @@ class Ship:
     @param r: the number of rows on the ship
     @param c: the number of columns on the ship
     @ param gn: the time taken to move the container from start to end
+    @ param gn: the time taken to move the container from start to end
     @param bay: the 2D array representing the ship's bay. MUST BE SUPPLIED BY THE MANIFEST ORDER TO SUCCESSFULLY DISPLAY THE ORDER
     @return: a Ship object
     '''
@@ -16,7 +17,15 @@ class Ship:
 
         # Initialize bay with "UNUSED" for all elements
         self.bay = [[(0, "UNUSED") for _ in range(c)] for _ in range(r)]
+        # Initialize bay with "UNUSED" for all elements
+        self.bay = [[(0, "UNUSED") for _ in range(c)] for _ in range(r)]
 
+        # Stores a tuple of the form (top, bottom) for each column
+        # The top is the first instance of a container in the column
+        # The bottom is the last instance of a container in the column
+        self.colHeight = [(0,0)]*c
+
+        self.gn = gn
         # Stores a tuple of the form (top, bottom) for each column
         # The top is the first instance of a container in the column
         # The bottom is the last instance of a container in the column
@@ -27,6 +36,17 @@ class Ship:
         # Override with the provided bay if available
         if bay:
             self.bay = bay
+
+        # Adding a crane location (row, column) to the ship
+        self.craneLocation = (8,0)
+
+        # Adding a parent variable to each ship
+        self.parent = parent
+
+        # Adding variable to show what the specific move from the parent ship to the current ship was
+        # Initialized to ((-1,-1),(-1,-1)) because no container has been moved on the initial ship.
+        # ((startRow,startCol), (endRow,endCol))
+        self.lastMove = ((-1,-1),(-1,-1))
 
         # Adding a crane location (row, column) to the ship
         self.craneLocation = (8,0)

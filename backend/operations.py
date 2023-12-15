@@ -3,7 +3,7 @@ import copy
 ''''
 @function:this is the operations for balancing a ship
 @param ship: the Ship object
-@return: a list of expanded ships
+@return: a list of tuples of the form (score, ship)
 '''
 def balancingOperations(ship, mode):
     
@@ -256,8 +256,6 @@ def loadOperation(ship, loadContainer):
     new_ship.set_value(row, minCol, loadContainer)
     
     new_ship.lastMove = ((-1,-1),(row, minCol))
-    print(new_ship.lastMove)
-
     # Setting the crane to the new final location as the container
     new_ship.craneLocation = (row, minCol)
 

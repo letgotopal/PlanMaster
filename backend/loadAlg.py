@@ -1,5 +1,11 @@
+# For Frontend:
 from .ship import Ship
 from .operations import loadOperation
+
+# From backend:
+# from ship import Ship
+# from operations import loadOperation
+
 
 # Here, our goal test is to check if the all the containers have been loaded
 # i.e. if the loadList is empty

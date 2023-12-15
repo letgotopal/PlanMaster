@@ -1,6 +1,10 @@
+# For Frontend:
 from .ship import Ship
 from .operations import unloadOperations
 
+# For backend:
+# from ship import Ship
+# from operations import unloadOperations
 
 '''
 @function: Goal test for the unload algorithm
@@ -72,4 +76,3 @@ def ucs(ship, uList):
 #         res.append((ship.get_value(container[0], container[1])[1]))
     
 #     pass
-

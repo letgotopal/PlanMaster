@@ -7,7 +7,7 @@ import loadAlg
 import siftAlg
 
 def main():
-    test_filename = "ShipCase1.txt"
+    test_filename = "ShipCase4.txt"
 
 
     testManifest = manifest.Manifest()
@@ -24,25 +24,23 @@ def main():
     print()
 
     # Testing the sift's goal builder algorithm
-    new_ship = siftAlg.ucs(new_ship)
+    # new_ship = siftAlg.ucs(new_ship)
     new_ship.print_bay()        
     # print("Neighbors:", neighbors)
 
     # res = balancingAlg.ucs(new_ship)
 
-    # # res = loadAlg.load(new_ship, [(100, 'test1'), (100, 'test2'), (100, 'test3'), (100, 'test4'), (100, 'test5'), (100, 'test6'), (100, 'test7'), (100, 'test8'),
-    # #                               (100, 'test1'), (100, 'test2'), (100, 'test3'), (100, 'test4'), (100, 'test5'), (100, 'test6'), (100, 'test7'), (100, 'test8'),
-    # #                               (100, 'test1'), (100, 'test2'), (100, 'test3'), (100, 'test4'), (100, 'test5'), (100, 'test6'), (100, 'test7'), (100, 'test8')])
-    # #res = balancingAlg.ucs(new_ship)
+    res = loadAlg.load(new_ship, [(100, 'test1'), (100, 'test2'), (100, 'test3'), (100, 'test4'), (100, 'test5'), (100, 'test6'), (100, 'test7'), (100, 'test8'),
+                                  (100, 'test11'), (100, 'test12'), (100, 'test13'), (100, 'test14'), (100, 'test15'), (100, 'test16'), (100, 'test17'), (100, 'test18'),
+                                  (100, 'test21'), (100, 'test22'), (100, 'test23'), (100, 'test24'), (100, 'test25'), (100, 'test26'), (100, 'test27'), (100, 'test28')])
     
-    
-    # res = luAlg.ucs(new_ship, [(1,1), (2,1), (0,2)])
+    # res = luAlg.ucs(new_ship, [(6,4), (5,4)])
 
-    # print(res)
-    # print("The final ship's G(n) is: ", res.gn, "and it's crane values are: ", res.craneLocation)
-    # print("The ship's col heights are: ", res.colHeight)
-    # print("The final move was: ", res.lastMove)
-    # res.print_bay()
+    print(res)
+    print("The final ship's G(n) is: ", res.gn, "and it's crane values are: ", res.craneLocation)
+    print("The ship's col heights are: ", res.colHeight)
+    print("The final move was: ", res.lastMove)
+    res.print_bay()
     
     while(type(res.parent) != type(None)):
         res = res.parent

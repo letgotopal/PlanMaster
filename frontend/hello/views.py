@@ -16,19 +16,7 @@ from backend.ship import Ship
 from backend import luAlg, trace, balancingAlg, manifest, loadAlg
 from .models import InstructionList, Instruction
     
-'''
-    def post(self, request, *args, **kwargs):
-        sign_in_name = request.POST.get('SignIn', '')
-        if sign_in_name:
-            file_path = '/Users/mohamed/Desktop/PlanMaster/frontend/LogInFile/LogIn.txt'
-            los_angeles_time = datetime.now()
-            timestamp = los_angeles_time.strftime("%m-%d-%Y %H:%M:%S")
-            with open(file_path, 'a') as file:
-                file.write(f'{sign_in_name} - {timestamp}\n')
 
-        return render(request, self.template_name, {'sign_in_name': sign_in_name})
-
-'''
 class SharedData:
     upload_path = None
 
@@ -79,7 +67,8 @@ class HomePageView(View):
     def handle_sign_in(self, request):
         sign_in_name = request.POST.get('SignIn', '')
         if sign_in_name:
-            file_path = '/Users/mohamed/Desktop/PlanMaster/frontend/LogInFile/LogIn.txt'
+            file_path = os.path.join('LogInFile', 'LogIn.txt')
+           # file_path = '/Users/mohamed/Desktop/PlanMaster/frontend/LogInFile/LogIn.txt'
             los_angeles_time = datetime.now()
             timestamp = los_angeles_time.strftime("%m-%d-%Y %H:%M:%S")
             with open(file_path, 'a') as file:
@@ -159,7 +148,7 @@ class GridPageView(TemplateView):
         return redirect('movespageU')
     
 def download_txt(request):
-    file_path = "/Users/mohamed/Desktop/PlanMaster/frontend/LogInFile/LogIn.txt"
+    file_path = os.path.join('LogInFile', 'LogIn.txt')
     # Check if the file exists
     if os.path.exists(file_path):
         # Open the file and read its content
@@ -173,7 +162,7 @@ def download_txt(request):
         return HttpResponse("File not found")
     
 def clear_txt(request):
-    file_path = "/Users/mohamed/Desktop/PlanMaster/frontend/LogInFile/LogIn.txt"
+    file_path = os.path.join('LogInFile', 'LogIn.txt')
 
     if os.path.exists(file_path):
         with open(file_path, 'w') as file:
@@ -188,11 +177,13 @@ class MovesView(View):
     def get(self, request):
         test_filename = SharedData.upload_path
         if SharedData.upload_path is None:
-            return redirect('home')
+            return redirect('homepage')
         testManifest = Manifest()
         new_ship = testManifest.read_manifest(test_filename)
 
         res = balancingAlg.ucs(new_ship)
+
+        outbound_manifest = Manifest.write_manifest(self, res, test_filename)
 
         moves_data = []
 
@@ -218,13 +209,28 @@ class MovesView(View):
     def post(self, request, *args, **kwargs):
         sign_in_name = request.POST.get('SignIn', '')
         if sign_in_name:
-            file_path = '/Users/mohamed/Desktop/PlanMaster/frontend/LogInFile/LogIn.txt'
+            file_path = os.path.join('LogInFile', 'LogIn.txt')
             los_angeles_time = datetime.now()
             timestamp = los_angeles_time.strftime("%m-%d-%Y %H:%M:%S")
             with open(file_path, 'a') as file:
                 file.write(f'{sign_in_name} - {timestamp}\n')
 
         return render(request, self.template_name, {'sign_in_name': sign_in_name})
+    
+def Outbound_txt(request):
+    test_filename = SharedData.upload_path
+    outbound_file = test_filename.replace(".txt", "_OUTBOUND.txt")
+    if os.path.exists(outbound_file):
+        # Open the file and read its content
+        with open(outbound_file, 'r') as file:
+            content = file.read()
+
+        response = HttpResponse(content, content_type='text/plain; charset=utf-8')
+        response['Content-Disposition'] = f'attachment; filename={os.path.basename(outbound_file)}'
+        return response
+    else:
+        return HttpResponse("File not found")
+    
 
 class MovesLandUView(View):
     def get(self, request):
@@ -261,7 +267,7 @@ class MovesLandUView(View):
     def post(self, request, *args, **kwargs):
         sign_in_name = request.POST.get('SignIn', '')
         if sign_in_name:
-            file_path = '/Users/mohamed/Desktop/PlanMaster/frontend/LogInFile/LogIn.txt'
+            file_path = os.path.join('LogInFile', 'LogIn.txt')
             los_angeles_time = datetime.now()
             timestamp = los_angeles_time.strftime("%m-%d-%Y %H:%M:%S")
             with open(file_path, 'a') as file:

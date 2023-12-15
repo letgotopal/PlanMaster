@@ -42,6 +42,7 @@ class HomePageView(View):
             
             # Process the uploaded file as needed
             # For example, save the file to a specific location
+            os.makedirs('ManifestUploads',exist_ok=True)
             upload_path = os.path.join('ManifestUploads', uploaded_file.name)
             with open('ManifestUploads/' + uploaded_file.name, 'wb+') as destination:
                 for chunk in uploaded_file.chunks():

@@ -1,5 +1,5 @@
-from operations import balancingOperations
-from siftAlg import ucs as siftAlg
+from .operations import balancingOperations
+from .siftAlg import ucs as siftAlg
 
 def balanceScore(ship):
     # Formula: BalanceScore = min(left, right)/max(left, right) > 0.9

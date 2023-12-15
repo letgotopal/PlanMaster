@@ -42,6 +42,7 @@ class HomePageView(View):
             
             # Process the uploaded file as needed
             # For example, save the file to a specific location
+            os.makedirs('ManifestUploads',exist_ok=True)
             upload_path = os.path.join('ManifestUploads', uploaded_file.name)
             with open('ManifestUploads/' + uploaded_file.name, 'wb+') as destination:
                 for chunk in uploaded_file.chunks():
@@ -126,11 +127,18 @@ class GridPageView(TemplateView):
         out_ship = luAlg.ucs(in_ship,[(unload_r[i],unload_c[i]) for i in range(len(unload_r))])
         out_ship_load = loadAlg.load(out_ship,load_list)
 
-        # save out ship model for later manifest access
+        # save out ship model for manifest access (maybe can be skipped
+        # if we write manifest immediately)
         out_grid = models.ShipGrid.objects.create()
         out_grid.read_bay(out_ship_load)
         out_grid.save()
         request.session['lu_after_id'] = out_grid.pk
+
+        # write outbound manifest
+        test_filename = SharedData.upload_path
+        if SharedData.upload_path is None:
+            return redirect('homepage')
+        outbound_manifest = Manifest.write_manifest(self,out_ship_load,test_filename)
 
         # generate trace to goal ship
         instructs = models.InstructionList.objects.create()
@@ -201,6 +209,16 @@ class MovesView(View):
 
         moves_data.pop()
         moves_data.reverse() 
+
+        la_time = datetime.now()
+        timestamp = la_time.strftime("%m-%d-%Y %H:%M:%S")
+
+        moves_with_timestamps = [
+            f"{move['origin']} to {move['destination']} at {la_time}"
+            for move in moves_data
+        ]
+
+        save_moves_to_file(moves_with_timestamps)
 
         context = {'moves': moves_data}
         return render(request, 'moves.html', context)
@@ -278,4 +296,8 @@ class MovesLandUView(View):
 class TutorialPageView(TemplateView):
     template_name = "tutorialpage.html"
 
-
+def save_moves_to_file(moves):
+    file_path = os.path.join('LogInFile', 'LogIn.txt')
+    with open(file_path, 'a') as ship_file:
+        for move in moves:
+            ship_file.write(move + '\n') 

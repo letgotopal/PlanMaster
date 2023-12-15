@@ -253,7 +253,7 @@ class MovesLandUView(View):
             
 
             move_info = {
-                "origin": (instruction.start_x + 1, instruction.start_y + 1),
+                "origin": initial_destination,
                 "destination": final_destination,
             }
             moves_data.append(move_info)

@@ -32,8 +32,8 @@
     <button id="prevBtn" onclick="prevMove()">Back</button>
     <button id="nextBtn" onclick="nextMove()">Next</button>
 
-    <a href="{% url 'gridpage' %}">
-        <button>Grid</button>
+    <a href="{% url 'homepage' %}">
+        <button>Home</button>
     </a>
 
     <script>
@@ -84,4 +84,7 @@
         });
     }
 </script>
+<a href="{% url 'Outbound_txt' %}" download>
+    <button>Download Outbound Manifest</button>
+</a>
 </html>

@@ -1,0 +1,117 @@
+{% include 'headerstuff.html' %}
+{% load static %}
+
+<html>
+
+<head>
+    <link rel="stylesheet" href="{% static 'css/gridstuff.css' %}">
+</head>
+
+<body>
+
+    <h2>Grid</h2>
+    Select boxes to be unloaded or click "Load" to enter containers to load.
+
+    <button id="load-button">Load</button>
+    <div id='display-select' style='text-align:center;'></div>
+    <div id='box-grid-init' style='text-align:center;'></div>
+    <div id='process-panel' style='text-align:center;'></div>
+    
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+
+    <script type='text/javascript'>
+
+        var load_button = document.getElementById('load-button');
+        var load_list = [];
+        load_button.onclick = function(){
+            var load_text = prompt('Enter description of container to load:');
+            var load_weight = prompt('Enter weight of the container:');
+            if(load_text && load_weight) load_list.push([load_weight,load_text]);
+            else alert('Please input valid entry!')
+        }
+
+        var div = document.getElementById('box-grid-init');
+        div.className = 'box-grid';
+
+        var m_status = {{ status }};
+
+        for(let i = m_status.length - 2; i >= 0; i--) {
+            var grow = div.appendChild(document.createElement('tr'));
+            for(let j = 0; j < m_status[0].length; j++) {
+                var box = grow.appendChild(document.createElement('td'));
+
+                box.setAttribute('box-state', 'no-select');
+                box.setAttribute('row', i);
+                box.setAttribute('col', j);
+
+                if(m_status[i][j] == 1) {
+                    box.className = 'no';
+                    box.innerText = 'Select\n[' + (i+1) + ',' + (j+1) + ']';
+
+                    box.addEventListener('click', function(event){
+                        event.preventDefault();
+                        if(this.getAttribute('box-state') == 'no-select'){
+                            this.innerText = 'Remove\n[' + (i+1) + ',' + (j+1) + ']';
+                            this.className = 'yes';
+                            this.setAttribute('box-state', 'yes-select');
+                        } else if(this.getAttribute('box-state') == 'yes-select'){
+                            this.innerText = 'Select\n[' + (i+1) + ',' + (j+1) + ']';
+                            this.className = 'no';
+                            this.setAttribute('box-state', 'no-select');
+                        }
+                    });
+                }
+                else if(m_status[i][j] == 0) {
+                    box.className = 'empty';
+                    box.innerText = 'Empty\n[' + (i+1) + ',' + (j+1) + ']';;
+                }
+                else if(m_status[i][j] < 0) {
+                    box.className = 'na';
+                    box.innerText = 'N/A\n[' + (i+1) + ',' + (j+1) + ']';;
+                }
+            }
+        }
+
+        var p_panel = document.getElementById('process-panel');
+        var processbutton = p_panel.appendChild(document.createElement('button'));
+        processbutton.innerText = 'Process';
+        processbutton.setAttribute('work-state', 'not-working');
+        processbutton.addEventListener('click', function(event){
+            event.preventDefault();
+            this.innerText = 'Working...';
+            if(this.getAttribute('work-state') == 'not-working'){
+                this.setAttribute('work-state', 'working');
+
+                var unload_r = [];
+                var unload_c = [];
+                var yes_boxes = document.getElementsByClassName('yes');
+                for(var i = 0; i < yes_boxes.length; i++) {
+                    unload_r.push(parseInt(yes_boxes[i].getAttribute('row')));
+                    unload_c.push(parseInt(yes_boxes[i].getAttribute('col')));
+                }
+
+                if(unload_r.length + load_list.length < 1) {
+                    alert('Please select at least one container!');
+                    this.innerText = 'Process';
+                    this.setAttribute('work-state', 'not-working');
+                }
+                else {
+                    $.ajax({ type: 'POST', url: 'process_grid', headers: {'X-CSRFToken': '{{ csrf_token }}'}, data: {
+                        unload_r: JSON.stringify(unload_r),
+                        unload_c: JSON.stringify(unload_c),
+                        load_list: JSON.stringify(load_list)
+                    }, complete: function(response){
+                        window.location.replace('/movesLandU');
+                    }});
+                }
+                
+            }
+        });
+
+    </script>
+</body>
+<div class="operations-buttons">
+    <button><a href="/movesLandU">Moves for Unloading</a></button>
+    <button><a href="/movesLandU"> Moves for loading</a></button>
+</div>
+</html>

@@ -1,0 +1,12 @@
+<a href="{% url 'download_txt' %}" download>
+    <button>Download .txt File</button>
+</a>
+
+<form action="{% url 'clear_txt' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Clear File</button>
+</form>
+
+<a href="{% url 'home' %}">
+    <button>Home</button>
+  </a>

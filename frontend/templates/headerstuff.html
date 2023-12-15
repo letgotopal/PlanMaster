@@ -1,0 +1,26 @@
+{% load static %}
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/headerstuff.css' %}">
+    <title>S&L Software: PlanMaster</title>
+</head>
+<body>
+    <div class="HeaderBar">
+        <p class="Title">
+            <h1><img src="{% static 'images/logo.jpeg' %}" alt="My image" width="70" height="70">  S&L Software: PlanMaster</h1>
+        </p>
+        <nav class="navbar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li>
+                    <a href="#">Menu</a>
+                    <ul>
+                        <li><a href="/manage">Manage</a></li>
+                        <li><a href="/tutorial">Tutorial</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>

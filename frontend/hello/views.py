@@ -202,6 +202,16 @@ class MovesView(View):
         moves_data.pop()
         moves_data.reverse() 
 
+        la_time = datetime.now()
+        timestamp = la_time.strftime("%m-%d-%Y %H:%M:%S")
+
+        moves_with_timestamps = [
+            f"{move['origin']} to {move['destination']} at {la_time}"
+            for move in moves_data
+        ]
+
+        save_moves_to_file(moves_with_timestamps)
+
         context = {'moves': moves_data}
         return render(request, 'moves.html', context)
     
@@ -278,4 +288,8 @@ class MovesLandUView(View):
 class TutorialPageView(TemplateView):
     template_name = "tutorialpage.html"
 
-
+def save_moves_to_file(moves):
+    file_path = os.path.join('LogInFile', 'LogIn.txt')
+    with open(file_path, 'a') as ship_file:
+        for move in moves:
+            ship_file.write(move + '\n') 

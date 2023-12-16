@@ -23,5 +23,5 @@ def load(ship, loadList):
         container = loadList.pop(0)
         ship = loadOperation(ship, container)
         if isinstance(ship, int):
-            return "ERROR: Loading failed/interrupted"
+            return None
     return ship

@@ -1,0 +1,28 @@
+Here, I will be providing instructions on how to execute the various edge-cases designed to test the unloading features
+
+Test 1: Unloading no containers to a Ship:
+In this case, we are testing what happens when no containers are provided to unload during running the unload function. This would mean the user supplies nothing
+Use the file unloadNone.txt to perform this task
+Step 1: Upload the file unloadNone.txt using the Choose File button
+Step 2: Click on upload to successfully upload the file
+Step 3: Click on the Load/Unload button to proceed with the unload
+Step 4: In the grid page, click on Process, thereby skipping the unloading function
+Result: You should recieve an error stating "Please select at least one container!"
+
+Test 2: Unloading all the containers from a Ship:
+In this case, we are testing what happens when all the containers are unloaded. This would mean the user selects all the containers on the ship to be unloaded
+Use the file unloadFull.txt to perform this task
+Step 1: Upload the file unloadFull.txt using the Choose File button
+Step 2: Click on upload to successfully upload the file
+Step 3: Click on the Load/Unload button to proceed with the unload
+Step 4: In the grid page, select all the containers (which would turn into remove) and click on Process
+Result: The following steps displayed should instruct the user to remove all the containers from the ship
+
+Test 3: Unloading multiple from a Ship:
+In this case, we are testing what happens when some the containers are unloaded.
+Use the file unloadMany.txt to perform this task
+Step 1: Upload the file unloadMany.txt using the Choose File button
+Step 2: Click on upload to successfully upload the file
+Step 3: Click on the Load/Unload button to proceed with the unload
+Step 4: In the grid page, select containers (3,1), (2,2) and (1,4) the containers (which would turn into remove) and click on Process
+Result: The following steps displayed should lead to preserving just the container (1,9) on the ship

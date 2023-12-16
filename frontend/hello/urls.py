@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomePageView, LogPageView, ManagePageView, TutorialPageView, MovesView, MovesLandUView, GridPageView, download_txt, clear_txt, home, Outbound_txt
+from .views import HomePageView, LogPageView, ManagePageView, TutorialPageView, MovesView, MovesLandUView, GridPageView, download_txt, clear_txt, Outbound_txt
 
 urlpatterns = [
     path("manage/", ManagePageView.as_view(), name="managepage"),
@@ -10,7 +10,6 @@ urlpatterns = [
     path("gridpage/process_grid", GridPageView.as_view(), name="process_grid"),
     path('download-txt/', download_txt, name='download_txt'),
     path('clear-txt/', clear_txt, name='clear_txt'),
-    path('home/', home, name='home'),
     path('moves/', MovesView.as_view(), name='movespage'),
     path('movesLandU/', MovesLandUView.as_view(), name='movespageU'),
     path('Outbound_txt/', Outbound_txt, name='Outbound_txt'),

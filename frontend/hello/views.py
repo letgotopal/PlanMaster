@@ -92,9 +92,10 @@ class GridPageView(TemplateView):
         grid_data = models.ShipGrid.objects.get(pk=request.session['lu_before_id'])
         grid_rows = grid_data.shiprow_set.all()
 
-        # set status of grid cells
+        # set status of grid cells and descriptions
         # 1 for occupied, 0 for empty, -1 for n/a
         status = [[0]*grid_rows[0].shipcell_set.all().count() for _ in range(grid_rows.count())]
+        grid_descr = [[None]*grid_rows[0].shipcell_set.all().count() for _ in range(grid_rows.count())]
         for i in range(grid_rows.count()):
             row_cells = grid_rows[i].shipcell_set.all()
             for j in range(row_cells.count()):
@@ -104,10 +105,12 @@ class GridPageView(TemplateView):
                     status[i][j] = 0
                 else:
                     status[i][j] = 1
+                    grid_descr[i][j] = row_cells[j].description[:5]
 
         context={
             'status':status,
-            'grid_data':grid_data
+            'grid_data':grid_data,
+            'grid_descr':json.dumps(grid_descr)
         }
 
         return render(request,self.template_name,context)
@@ -126,6 +129,10 @@ class GridPageView(TemplateView):
         in_ship = grid_data.to_ship()
         out_ship = luAlg.ucs(in_ship,[(unload_r[i],unload_c[i]) for i in range(len(unload_r))])
         out_ship_load = loadAlg.load(out_ship,load_list)
+
+        # load failed, ship full
+        if out_ship_load is None:
+            raise Exception('ship full')
 
         # save out ship model for manifest access (maybe can be skipped
         # if we write manifest immediately)
@@ -153,7 +160,7 @@ class GridPageView(TemplateView):
         # Instruction objects can be referenced by
         # instruction_list.instruction_set.all()[index]
 
-        return redirect('movespageU')
+        return render(request, self.template_name)
     
 def download_txt(request):
     file_path = os.path.join('LogInFile', 'LogIn.txt')
@@ -253,6 +260,8 @@ def Outbound_txt(request):
 class MovesLandUView(View):
     def get(self, request):
 
+        print('GOT')
+
         instruction_list = get_object_or_404(InstructionList, pk=request.session['lu_instructs_id'])
 
         instructions = instruction_list.instruction_set.all()
@@ -277,6 +286,16 @@ class MovesLandUView(View):
             moves_data.append(move_info)
         
         moves_data.pop(0)
+
+        la_time = datetime.now()
+        timestamp = la_time.strftime("%m-%d-%Y %H:%M:%S")
+
+        moves_with_timestamps = [
+            f"Moved {move['origin']} to {move['destination']} at {la_time}"
+            for move in moves_data
+        ]
+
+        save_moves_to_file(moves_with_timestamps)
 
         context = {'moves': moves_data}
         return render(request, 'movesLandU.html', context)

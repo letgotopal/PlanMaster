@@ -34,6 +34,7 @@
         div.className = 'box-grid';
 
         var m_status = {{ status }};
+        var g_descr = {{ grid_descr|safe }};
 
         for(let i = m_status.length - 2; i >= 0; i--) {
             var grow = div.appendChild(document.createElement('tr'));
@@ -46,16 +47,14 @@
 
                 if(m_status[i][j] == 1) {
                     box.className = 'no';
-                    box.innerText = 'Select\n[' + (i+1) + ',' + (j+1) + ']';
+                    box.innerText = g_descr[i][j] + '\n[' + (i+1) + ',' + (j+1) + ']';
 
                     box.addEventListener('click', function(event){
                         event.preventDefault();
                         if(this.getAttribute('box-state') == 'no-select'){
-                            this.innerText = 'Remove\n[' + (i+1) + ',' + (j+1) + ']';
                             this.className = 'yes';
                             this.setAttribute('box-state', 'yes-select');
                         } else if(this.getAttribute('box-state') == 'yes-select'){
-                            this.innerText = 'Select\n[' + (i+1) + ',' + (j+1) + ']';
                             this.className = 'no';
                             this.setAttribute('box-state', 'no-select');
                         }

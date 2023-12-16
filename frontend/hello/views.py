@@ -130,6 +130,10 @@ class GridPageView(TemplateView):
         out_ship = luAlg.ucs(in_ship,[(unload_r[i],unload_c[i]) for i in range(len(unload_r))])
         out_ship_load = loadAlg.load(out_ship,load_list)
 
+        # load failed, ship full
+        if out_ship_load is None:
+            raise Exception('ship full')
+
         # save out ship model for manifest access (maybe can be skipped
         # if we write manifest immediately)
         out_grid = models.ShipGrid.objects.create()

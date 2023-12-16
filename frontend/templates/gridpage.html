@@ -25,8 +25,9 @@
         var load_list = [];
         load_button.onclick = function(){
             var load_text = prompt('Enter description of container to load:');
-            var load_weight = prompt('Enter weight of the container:');
-            if(load_text && load_weight) load_list.push([load_weight,load_text]);
+            var load_weight = parseInt(prompt('Enter weight of the container:'));
+            if(load_text && load_weight && Number.isInteger(load_weight)
+                && load_weight >= 0) load_list.push([load_weight,load_text]);
             else alert('Please input valid entry!')
         }
 

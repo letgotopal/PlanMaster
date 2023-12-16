@@ -99,8 +99,11 @@
                         unload_r: JSON.stringify(unload_r),
                         unload_c: JSON.stringify(unload_c),
                         load_list: JSON.stringify(load_list)
-                    }, complete: function(response){
+                    }, success: function(response){
                         window.location.replace('/movesLandU');
+                    }, error: function(response){
+                        alert('Error loading, ship full!');
+                        window.location.replace('/homepage');
                     }});
                 }
                 
